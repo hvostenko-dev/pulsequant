@@ -8,21 +8,29 @@ import { PriceAlert } from '@/database/models/alert.model';
 import { getBatchEnrichedQuotes } from '@/lib/actions/finnhub.actions';
 import { INSTITUTIONAL_STOCKS_DIRECTORY } from '@/lib/constants';
 
-const getCurrentUserId = async (): Promise<string> => {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
+const getOptionalCurrentUserId = async (): Promise<string | null> => {
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        });
+        return session?.user?.id ?? null;
+    } catch {
+        return null;
+    }
+};
 
-    if (!session?.user?.id) {
+const getCurrentUserId = async (): Promise<string> => {
+    const userId = await getOptionalCurrentUserId();
+    if (!userId) {
         throw new Error('You must be signed in');
     }
-
-    return session.user.id;
+    return userId;
 };
 
 export const getUserAlerts = async (): Promise<Alert[]> => {
     try {
-        const userId = await getCurrentUserId();
+        const userId = await getOptionalCurrentUserId();
+        if (!userId) return [];
         await connectToDatabase();
 
         const docs = await PriceAlert.find({ userId }).sort({ createdAt: -1 }).lean();
@@ -60,8 +68,7 @@ export const getUserAlerts = async (): Promise<Alert[]> => {
                         : new Date(doc.createdAt).toISOString(),
             };
         });
-    } catch (error) {
-        console.error('GET_ALERTS_ERROR:', error);
+    } catch {
         return [];
     }
 };

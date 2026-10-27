@@ -13,23 +13,29 @@ export interface WatchlistRecord {
     addedAt: string;
 }
 
-const getCurrentUserId = async (): Promise<string> => {
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
-
-    if (!session?.user?.id) {
-        throw new Error("You must be signed in");
+const getOptionalCurrentUserId = async (): Promise<string | null> => {
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        });
+        return session?.user?.id ?? null;
+    } catch {
+        return null;
     }
-
-    return session.user.id;
 };
 
-export const getCurrentUserWatchlist = async (): Promise<
-    WatchlistRecord[]
-> => {
+const getCurrentUserId = async (): Promise<string> => {
+    const userId = await getOptionalCurrentUserId();
+    if (!userId) {
+        throw new Error("You must be signed in");
+    }
+    return userId;
+};
+
+export const getCurrentUserWatchlist = async (): Promise<WatchlistRecord[]> => {
     try {
-        const userId = await getCurrentUserId();
+        const userId = await getOptionalCurrentUserId();
+        if (!userId) return [];
 
         await connectToDatabase();
 
@@ -45,17 +51,15 @@ export const getCurrentUserWatchlist = async (): Promise<
                     ? item.addedAt.toISOString()
                     : new Date(item.addedAt).toISOString(),
         }));
-    } catch (error) {
-        console.error("GET_WATCHLIST_ERROR:", error);
+    } catch {
         return [];
     }
 };
 
-export const getCurrentUserWatchlistSymbols = async (): Promise<
-    string[]
-> => {
+export const getCurrentUserWatchlistSymbols = async (): Promise<string[]> => {
     try {
-        const userId = await getCurrentUserId();
+        const userId = await getOptionalCurrentUserId();
+        if (!userId) return [];
 
         await connectToDatabase();
 
@@ -67,8 +71,7 @@ export const getCurrentUserWatchlistSymbols = async (): Promise<
         return items.map((item) =>
             String(item.symbol).toUpperCase()
         );
-    } catch (error) {
-        console.error("GET_WATCHLIST_SYMBOLS_ERROR:", error);
+    } catch {
         return [];
     }
 };
@@ -103,10 +106,6 @@ export const getWatchlistSymbolsByEmail = async (
         );
 
         if (!user) {
-            console.warn(
-                `GET_WATCHLIST_BY_EMAIL: User not found for ${normalizedEmail}`
-            );
-
             return [];
         }
 
@@ -127,19 +126,15 @@ export const getWatchlistSymbolsByEmail = async (
             String(item.symbol).toUpperCase()
         );
     } catch (error) {
-        console.error(
-            "GET_WATCHLIST_SYMBOLS_BY_EMAIL_ERROR:",
-            error
-        );
-
+        console.error("GET_WATCHLIST_SYMBOLS_BY_EMAIL_ERROR:", error);
         return [];
     }
 };
 
 export const addStockToWatchlist = async ({
-                                              symbol,
-                                              company,
-                                          }: {
+    symbol,
+    company,
+}: {
     symbol: string;
     company: string;
 }) => {
@@ -185,8 +180,8 @@ export const addStockToWatchlist = async ({
 };
 
 export const removeStockFromWatchlist = async ({
-                                                   symbol,
-                                               }: {
+    symbol,
+}: {
     symbol: string;
 }) => {
     const userId = await getCurrentUserId();
