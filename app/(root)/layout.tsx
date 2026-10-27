@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import { ShieldCheck, Activity, Terminal } from "lucide-react";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
@@ -19,7 +20,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
 
     return (
         <div className="min-h-screen flex flex-col bg-[#050505] text-gray-300">
-            <Header user={user} />
+            <Header user={user} /><KeyboardShortcuts />
 
             <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
                 {children}

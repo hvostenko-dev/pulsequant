@@ -1,5 +1,7 @@
 import TradingViewWidget from '@/components/TradingViewWidget';
 import Link from 'next/link';
+import MarketStatusBar from '@/components/MarketStatusBar';
+import MarketPulseGauge from '@/components/MarketPulseGauge';
 import {
     HEATMAP_WIDGET_CONFIG,
     MARKET_DATA_WIDGET_CONFIG,
@@ -43,9 +45,10 @@ const Home = async () => {
             </div>
 
             {/* Hero Command Bar */}
-            <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent p-6 sm:p-8 lg:p-10 shadow-2xl">
-                <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-yellow-400/10 blur-[120px]" />
-                <div className="pointer-events-none absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-emerald-500/10 blur-[120px]" />
+            <MarketStatusBar />
+            <section className="animate-fade-up glass aurora-border relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent p-6 sm:p-8 lg:p-10 shadow-2xl">
+                <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-violet-500/20 blur-[120px]" />
+                <div className="pointer-events-none absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-cyan-400/15 blur-[120px]" />
 
                 <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                     <div className="max-w-3xl">
@@ -56,7 +59,7 @@ const Home = async () => {
 
                         <h1 className="mt-4 text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
                             Institutional Market Intelligence,
-                            <span className="block bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent">
+                            <span className="block bg-gradient-to-r from-cyan-200 via-violet-300 to-yellow-300 bg-clip-text text-transparent">
                                 Quant Insights & Portfolio Alpha.
                             </span>
                         </h1>
@@ -131,6 +134,20 @@ const Home = async () => {
                             </Link>
                         );
                     })}
+                </div>
+            </section>
+
+            {/* TradingView Institutional Terminal Grid */}
+            <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                <MarketPulseGauge quotes={quotes} />
+                <div className="glass aurora-border rounded-2xl p-5 lg:col-span-2">
+                    <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">Pro Tips</h3>
+                    <ul className="mt-3 grid gap-2 text-sm text-gray-300 sm:grid-cols-2">
+                        <li className="rounded-lg bg-white/[0.04] p-3">Press <kbd className="kbd">Ctrl</kbd> <kbd className="kbd">K</kbd> to search any symbol instantly.</li>
+                        <li className="rounded-lg bg-white/[0.04] p-3">Use <kbd className="kbd">g</kbd> then <kbd className="kbd">p</kbd> to jump to your Portfolio.</li>
+                        <li className="rounded-lg bg-white/[0.04] p-3">Run the Half-Kelly sizer in the simulator to size positions by edge.</li>
+                        <li className="rounded-lg bg-white/[0.04] p-3">Press <kbd className="kbd">?</kbd> anywhere to view every shortcut.</li>
+                    </ul>
                 </div>
             </section>
 
