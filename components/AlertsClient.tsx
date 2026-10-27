@@ -65,7 +65,7 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
     return (
         <div className="space-y-8">
             {/* Header */}
-            <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent p-6 sm:p-8 lg:p-10 shadow-2xl">
+            <section className="glass aurora-border relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent p-6 sm:p-8 lg:p-10 shadow-2xl">
                 <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-blue-500/10 blur-[120px]" />
                 <div className="pointer-events-none absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-yellow-400/10 blur-[120px]" />
 
@@ -91,7 +91,7 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
                             <Button
                                 onClick={handleSeed}
                                 disabled={isPending}
-                                className="bg-blue-500 font-bold text-white hover:bg-blue-400"
+                                className="h-10 px-4 text-sm bg-blue-500 font-bold text-white hover:bg-blue-400"
                             >
                                 {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
                                 Load Demo Alerts
@@ -103,8 +103,8 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
                             company="NVIDIA Corporation"
                             currentPrice={138.60}
                             trigger={
-                                <Button className="bg-yellow-400 font-bold text-black hover:bg-yellow-300">
-                                    <Plus className="mr-1.5 h-4 w-4" />
+                                <Button className="h-10 px-4 text-sm bg-yellow-400 font-bold text-black hover:bg-yellow-300">
+                                    <Plus className="mr-2 h-4 w-4" />
                                     New Price Alert
                                 </Button>
                             }
@@ -135,7 +135,7 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
             {/* Alerts List */}
             {alerts.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.02] p-12 text-center">
-                    <Bell className="mx-auto h-12 w-12 text-gray-600" />
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]"><Bell className="h-7 w-7 text-gray-500" /></div>
                     <h3 className="mt-4 text-lg font-bold text-white">No price monitors currently set</h3>
                     <p className="mt-1 text-sm text-gray-400 max-w-md mx-auto">
                         Never miss a key breakout or dip. Set custom price targets or click below to seed demo alerts.
@@ -143,7 +143,7 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
                     <Button
                         onClick={handleSeed}
                         disabled={isPending}
-                        className="mt-5 bg-yellow-400 font-bold text-black hover:bg-yellow-300"
+                        className="mt-5 h-10 px-4 text-sm bg-yellow-400 font-bold text-black hover:bg-yellow-300"
                     >
                         <Sparkles className="mr-2 h-4 w-4" />
                         Load Demo Alerts

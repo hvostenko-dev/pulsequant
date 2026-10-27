@@ -75,9 +75,9 @@ export default function AlertModal({
                     <Button
                         variant="outline"
                         size="sm"
-                        className="border-yellow-400/20 bg-yellow-400/10 text-yellow-300 hover:bg-yellow-400/20 hover:text-yellow-200"
+                        className="h-10 px-4 text-sm border-yellow-400/20 bg-yellow-400/10 text-yellow-300 hover:bg-yellow-400/20 hover:text-yellow-200"
                     >
-                        <Bell className="mr-1.5 h-3.5 w-3.5" />
+                        <Bell className="mr-2 h-4 w-4" />
                         Set Alert
                     </Button>
                 )}

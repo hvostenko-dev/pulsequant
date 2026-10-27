@@ -117,7 +117,7 @@ const WatchlistButton = ({
                 onClick={handleClick}
             >
                 {isPending ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                     <Star
                         className="watchlist-star"
@@ -139,12 +139,12 @@ const WatchlistButton = ({
             onClick={handleClick}
         >
             {isPending ? (
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : showTrashIcon && added ? (
-                <Trash2 className="mr-2 h-5 w-5" />
+                <Trash2 className="mr-2 h-4 w-4" />
             ) : (
                 <Star
-                    className="mr-2 h-5 w-5"
+                    className="mr-2 h-4 w-4"
                     fill={added ? "currentColor" : "none"}
                 />
             )}

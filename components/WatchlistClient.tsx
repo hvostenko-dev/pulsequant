@@ -60,7 +60,7 @@ export default function WatchlistClient({ stocks, quotesMap, news }: WatchlistCl
     return (
         <div className="space-y-8">
             {/* Hero Header */}
-            <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent p-6 sm:p-8 lg:p-10 shadow-2xl">
+            <section className="glass aurora-border relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent p-6 sm:p-8 lg:p-10 shadow-2xl">
                 <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-amber-400/10 blur-[120px]" />
 
                 <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -160,7 +160,7 @@ export default function WatchlistClient({ stocks, quotesMap, news }: WatchlistCl
             {/* Empty State */}
             {stocks.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.02] p-12 text-center">
-                    <Star className="mx-auto h-12 w-12 text-gray-600" />
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]"><Star className="h-7 w-7 text-gray-500" /></div>
                     <h3 className="mt-4 text-lg font-bold text-white">Your watchlist is empty</h3>
                     <p className="mt-1 text-sm text-gray-400 max-w-md mx-auto">
                         Search any stock symbol (or press ⌘K) and tap the star to add companies to your personal tracker.
@@ -239,7 +239,7 @@ export default function WatchlistClient({ stocks, quotesMap, news }: WatchlistCl
                                                     trigger={
                                                         <button
                                                             type="button"
-                                                            className="rounded-lg p-1.5 text-gray-400 hover:bg-yellow-400/10 hover:text-yellow-300"
+                                                            className="watchlist-icon-btn"
                                                             title="Set Alert"
                                                         >
                                                             <Bell className="h-4 w-4" />
@@ -292,7 +292,7 @@ export default function WatchlistClient({ stocks, quotesMap, news }: WatchlistCl
                                             trigger={
                                                 <button
                                                     type="button"
-                                                    className="rounded-lg p-1 text-gray-400 hover:text-yellow-300"
+                                                    className="watchlist-icon-btn"
                                                     title="Set Alert"
                                                 >
                                                     <Bell className="h-4 w-4" />

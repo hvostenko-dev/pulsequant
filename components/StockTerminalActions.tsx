@@ -89,28 +89,28 @@ export default function StockTerminalActions({
             {/* Quick Add to Portfolio */}
             <Button
                 variant="outline"
-                size="sm"
+                size="sm" 
                 onClick={handleQuickAddToPortfolio}
                 disabled={isPendingPortfolio}
-                className="border-emerald-400/20 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20"
+                className="h-10 px-4 text-sm border-emerald-400/20 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20"
             >
                 {isPendingPortfolio ? (
-                    <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : portfolioAdded ? (
-                    <Check className="mr-1.5 h-3.5 w-3.5 text-emerald-400" />
+                    <Check className="mr-2 h-4 w-4 text-emerald-400" />
                 ) : (
-                    <Briefcase className="mr-1.5 h-3.5 w-3.5" />
+                    <Briefcase className="mr-2 h-4 w-4" />
                 )}
                 {portfolioAdded ? 'In Portfolio' : 'Paper Trade'}
             </Button>
 
             {/* AI Research Brief */}
             <Button
-                size="sm"
+                size="sm" 
                 onClick={handleOpenAIReport}
-                className="bg-gradient-to-r from-yellow-400 to-amber-500 font-bold text-black hover:from-yellow-300 hover:to-amber-400 shadow-md shadow-yellow-400/10"
+                className="h-10 px-4 text-sm bg-gradient-to-r from-yellow-400 to-amber-500 font-bold text-black hover:from-yellow-300 hover:to-amber-400 shadow-md shadow-yellow-400/10"
             >
-                <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                <Sparkles className="mr-2 h-4 w-4" />
                 Gemini AI Report
             </Button>
 
