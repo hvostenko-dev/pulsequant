@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:db": "node scripts/test-db.mjs"
+    "test:db": "node scripts/test-db.mjs",
+    "dev:webpack": "next dev --webpack"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
