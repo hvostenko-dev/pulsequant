@@ -1,34 +1,43 @@
+export const APP_BRAND = {
+    name: 'PulseQuant',
+    tagline: 'Institutional AI Market Intelligence & Portfolio Terminal',
+    shortDescription: 'Real-time multi-asset analytics, paper-trading portfolio simulator, smart price alerts & Gemini AI equity research.',
+};
+
 export const NAV_ITEMS = [
-    { href: '/', label: 'Dashboard' },
-    { href: '/search', label: 'Search' },
+    { href: '/', label: 'Terminal' },
+    { href: '/portfolio', label: 'Portfolio' },
+    { href: '/screener', label: 'Screener & AI' },
     { href: '/watchlist', label: 'Watchlist' },
+    { href: '/alerts', label: 'Alerts' },
+    { href: '/search', label: 'Search' },
 ];
 
 // Sign-up form select options
 export const INVESTMENT_GOALS = [
-    { value: 'Growth', label: 'Growth' },
-    { value: 'Income', label: 'Income' },
-    { value: 'Balanced', label: 'Balanced' },
-    { value: 'Conservative', label: 'Conservative' },
+    { value: 'Growth', label: 'Aggressive Growth & Alpha' },
+    { value: 'Income', label: 'Dividend & Cash-Flow Income' },
+    { value: 'Balanced', label: 'Balanced Quantitative Core' },
+    { value: 'Conservative', label: 'Capital Preservation' },
 ];
 
 export const RISK_TOLERANCE_OPTIONS = [
-    { value: 'Low', label: 'Low' },
-    { value: 'Medium', label: 'Medium' },
-    { value: 'High', label: 'High' },
+    { value: 'Low', label: 'Low — Defensive / Low Beta' },
+    { value: 'Medium', label: 'Medium — Market Neutral / Core' },
+    { value: 'High', label: 'High — High Beta / Momentum' },
 ];
 
 export const PREFERRED_INDUSTRIES = [
-    { value: 'Technology', label: 'Technology' },
-    { value: 'Healthcare', label: 'Healthcare' },
-    { value: 'Finance', label: 'Finance' },
-    { value: 'Energy', label: 'Energy' },
-    { value: 'Consumer Goods', label: 'Consumer Goods' },
+    { value: 'Technology', label: 'Technology & AI Semiconductors' },
+    { value: 'Healthcare', label: 'Healthcare & Biotech' },
+    { value: 'Finance', label: 'Financials & FinTech' },
+    { value: 'Energy', label: 'Energy & Clean Infrastructure' },
+    { value: 'Consumer Goods', label: 'Consumer & E-Commerce' },
 ];
 
 export const ALERT_TYPE_OPTIONS = [
-    { value: 'upper', label: 'Upper' },
-    { value: 'lower', label: 'Lower' },
+    { value: 'upper', label: 'Price Above (Upper Target 📈)' },
+    { value: 'lower', label: 'Price Below (Stop / Dip Target 📉)' },
 ];
 
 export const CONDITION_OPTIONS = [
@@ -36,63 +45,344 @@ export const CONDITION_OPTIONS = [
     { value: 'less', label: 'Less than (<)' },
 ];
 
+// Curated Institutional Stock Directory (used for Screener, Portfolio Demo & Fallback Enrichment)
+export const INSTITUTIONAL_STOCKS_DIRECTORY: Record<
+    string,
+    {
+        symbol: string;
+        name: string;
+        sector: string;
+        industry: string;
+        exchange: string;
+        fallbackPrice: number;
+        fallbackChange: number;
+        fallbackChangePercent: number;
+        marketCapBillions: number;
+        peRatio: number;
+        beta: number;
+        dividendYield: number;
+        eps: number;
+        high52W: number;
+        low52W: number;
+    }
+> = {
+    NVDA: {
+        symbol: 'NVDA',
+        name: 'NVIDIA Corporation',
+        sector: 'Technology',
+        industry: 'Semiconductors & AI Compute',
+        exchange: 'NASDAQ',
+        fallbackPrice: 138.60,
+        fallbackChange: 4.15,
+        fallbackChangePercent: 3.09,
+        marketCapBillions: 3380,
+        peRatio: 54.2,
+        beta: 1.68,
+        dividendYield: 0.03,
+        eps: 2.56,
+        high52W: 149.76,
+        low52W: 75.60,
+    },
+    AAPL: {
+        symbol: 'AAPL',
+        name: 'Apple Inc.',
+        sector: 'Technology',
+        industry: 'Consumer Hardware & Ecosystem',
+        exchange: 'NASDAQ',
+        fallbackPrice: 231.40,
+        fallbackChange: 2.85,
+        fallbackChangePercent: 1.25,
+        marketCapBillions: 3510,
+        peRatio: 34.8,
+        beta: 1.24,
+        dividendYield: 0.44,
+        eps: 6.65,
+        high52W: 237.23,
+        low52W: 164.08,
+    },
+    MSFT: {
+        symbol: 'MSFT',
+        name: 'Microsoft Corporation',
+        sector: 'Technology',
+        industry: 'Cloud Infrastructure & Enterprise AI',
+        exchange: 'NASDAQ',
+        fallbackPrice: 428.50,
+        fallbackChange: 3.90,
+        fallbackChangePercent: 0.92,
+        marketCapBillions: 3190,
+        peRatio: 36.1,
+        beta: 0.91,
+        dividendYield: 0.72,
+        eps: 11.86,
+        high52W: 468.35,
+        low52W: 385.58,
+    },
+    GOOGL: {
+        symbol: 'GOOGL',
+        name: 'Alphabet Inc.',
+        sector: 'Technology',
+        industry: 'Search, Cloud & Autonomous Systems',
+        exchange: 'NASDAQ',
+        fallbackPrice: 182.90,
+        fallbackChange: 2.40,
+        fallbackChangePercent: 1.33,
+        marketCapBillions: 2260,
+        peRatio: 25.4,
+        beta: 1.04,
+        dividendYield: 0.45,
+        eps: 7.20,
+        high52W: 191.75,
+        low52W: 130.67,
+    },
+    AMZN: {
+        symbol: 'AMZN',
+        name: 'Amazon.com, Inc.',
+        sector: 'Consumer Goods',
+        industry: 'E-Commerce & AWS Cloud',
+        exchange: 'NASDAQ',
+        fallbackPrice: 210.35,
+        fallbackChange: 3.45,
+        fallbackChangePercent: 1.67,
+        marketCapBillions: 2210,
+        peRatio: 43.5,
+        beta: 1.15,
+        dividendYield: 0,
+        eps: 4.83,
+        high52W: 215.90,
+        low52W: 151.61,
+    },
+    META: {
+        symbol: 'META',
+        name: 'Meta Platforms, Inc.',
+        sector: 'Technology',
+        industry: 'Social Platforms & Open-Weight AI',
+        exchange: 'NASDAQ',
+        fallbackPrice: 592.80,
+        fallbackChange: 8.60,
+        fallbackChangePercent: 1.47,
+        marketCapBillions: 1495,
+        peRatio: 28.9,
+        beta: 1.22,
+        dividendYield: 0.34,
+        eps: 20.51,
+        high52W: 602.95,
+        low52W: 414.50,
+    },
+    TSLA: {
+        symbol: 'TSLA',
+        name: 'Tesla, Inc.',
+        sector: 'Consumer Goods',
+        industry: 'Autonomous EV & Energy Storage',
+        exchange: 'NASDAQ',
+        fallbackPrice: 258.75,
+        fallbackChange: -4.20,
+        fallbackChangePercent: -1.60,
+        marketCapBillions: 815,
+        peRatio: 71.4,
+        beta: 2.31,
+        dividendYield: 0,
+        eps: 3.62,
+        high52W: 271.00,
+        low52W: 138.80,
+    },
+    JPM: {
+        symbol: 'JPM',
+        name: 'JPMorgan Chase & Co.',
+        sector: 'Finance',
+        industry: 'Global Investment Banking',
+        exchange: 'NYSE',
+        fallbackPrice: 236.40,
+        fallbackChange: 1.95,
+        fallbackChangePercent: 0.83,
+        marketCapBillions: 672,
+        peRatio: 13.1,
+        beta: 1.08,
+        dividendYield: 2.12,
+        eps: 18.04,
+        high52W: 248.10,
+        low52W: 179.20,
+    },
+    V: {
+        symbol: 'V',
+        name: 'Visa Inc.',
+        sector: 'Finance',
+        industry: 'Global Payment Networks',
+        exchange: 'NYSE',
+        fallbackPrice: 308.20,
+        fallbackChange: 1.80,
+        fallbackChangePercent: 0.59,
+        marketCapBillions: 618,
+        peRatio: 31.2,
+        beta: 0.94,
+        dividendYield: 0.76,
+        eps: 9.88,
+        high52W: 316.40,
+        low52W: 252.70,
+    },
+    AMD: {
+        symbol: 'AMD',
+        name: 'Advanced Micro Devices, Inc.',
+        sector: 'Technology',
+        industry: 'Data Center GPUs & x86 CPUs',
+        exchange: 'NASDAQ',
+        fallbackPrice: 156.90,
+        fallbackChange: -1.85,
+        fallbackChangePercent: -1.16,
+        marketCapBillions: 254,
+        peRatio: 44.8,
+        beta: 1.69,
+        dividendYield: 0,
+        eps: 3.50,
+        high52W: 227.30,
+        low52W: 131.12,
+    },
+    PLTR: {
+        symbol: 'PLTR',
+        name: 'Palantir Technologies Inc.',
+        sector: 'Technology',
+        industry: 'Enterprise AI & Defense Ontology',
+        exchange: 'NYSE',
+        fallbackPrice: 61.40,
+        fallbackChange: 2.75,
+        fallbackChangePercent: 4.69,
+        marketCapBillions: 138,
+        peRatio: 98.5,
+        beta: 2.54,
+        dividendYield: 0,
+        eps: 0.62,
+        high52W: 66.00,
+        low52W: 20.33,
+    },
+    NFLX: {
+        symbol: 'NFLX',
+        name: 'Netflix, Inc.',
+        sector: 'Consumer Goods',
+        industry: 'Global Streaming & Ad-Tech',
+        exchange: 'NASDAQ',
+        fallbackPrice: 842.10,
+        fallbackChange: 11.30,
+        fallbackChangePercent: 1.36,
+        marketCapBillions: 362,
+        peRatio: 45.2,
+        beta: 1.26,
+        dividendYield: 0,
+        eps: 18.63,
+        high52W: 858.00,
+        low52W: 542.01,
+    },
+    COIN: {
+        symbol: 'COIN',
+        name: 'Coinbase Global, Inc.',
+        sector: 'Finance',
+        industry: 'Digital Asset Exchange & Custody',
+        exchange: 'NASDAQ',
+        fallbackPrice: 294.50,
+        fallbackChange: 14.20,
+        fallbackChangePercent: 5.07,
+        marketCapBillions: 73.5,
+        peRatio: 48.0,
+        beta: 3.12,
+        dividendYield: 0,
+        eps: 6.13,
+        high52W: 334.86,
+        low52W: 146.12,
+    },
+    CRWD: {
+        symbol: 'CRWD',
+        name: 'CrowdStrike Holdings, Inc.',
+        sector: 'Technology',
+        industry: 'Cloud Native Cybersecurity',
+        exchange: 'NASDAQ',
+        fallbackPrice: 348.20,
+        fallbackChange: 5.40,
+        fallbackChangePercent: 1.58,
+        marketCapBillions: 85.4,
+        peRatio: 82.1,
+        beta: 1.11,
+        dividendYield: 0,
+        eps: 4.24,
+        high52W: 398.33,
+        low52W: 200.81,
+    },
+};
+
+export const TICKER_TAPE_WIDGET_CONFIG = {
+    symbols: [
+        { proName: 'FOREXCOM:SPXUSD', title: 'S&P 500' },
+        { proName: 'FOREXCOM:NSXUSD', title: 'Nasdaq 100' },
+        { proName: 'NASDAQ:NVDA', title: 'NVIDIA' },
+        { proName: 'NASDAQ:AAPL', title: 'Apple' },
+        { proName: 'NASDAQ:MSFT', title: 'Microsoft' },
+        { proName: 'NASDAQ:AMZN', title: 'Amazon' },
+        { proName: 'NASDAQ:META', title: 'Meta' },
+        { proName: 'NASDAQ:TSLA', title: 'Tesla' },
+        { proName: 'BITSTAMP:BTCUSD', title: 'Bitcoin' },
+        { proName: 'BITSTAMP:ETHUSD', title: 'Ethereum' },
+    ],
+    showSymbolLogo: true,
+    isTransparent: true,
+    displayMode: 'adaptive',
+    colorTheme: 'dark',
+    locale: 'en',
+};
+
 // TradingView Charts
 export const MARKET_OVERVIEW_WIDGET_CONFIG = {
-    colorTheme: 'dark', // dark mode
-    dateRange: '12M', // last 12 months
-    locale: 'en', // language
-    largeChartUrl: '', // link to a large chart if needed
-    isTransparent: true, // makes background transparent
-    showFloatingTooltip: true, // show tooltip on hover
-    plotLineColorGrowing: '#0FEDBE', // line color when price goes up
-    plotLineColorFalling: '#0FEDBE', // line color when price falls
-    gridLineColor: 'rgba(240, 243, 250, 0)', // grid line color
-    scaleFontColor: '#DBDBDB', // font color for scale
-    belowLineFillColorGrowing: 'rgba(41, 98, 255, 0.12)', // fill under line when growing
-    belowLineFillColorFalling: 'rgba(41, 98, 255, 0.12)', // fill under line when falling
-    belowLineFillColorGrowingBottom: 'rgba(41, 98, 255, 0)',
-    belowLineFillColorFallingBottom: 'rgba(41, 98, 255, 0)',
-    symbolActiveColor: 'rgba(15, 237, 190, 0.05)', // highlight color for active symbol
+    colorTheme: 'dark',
+    dateRange: '12M',
+    locale: 'en',
+    largeChartUrl: '',
+    isTransparent: true,
+    showFloatingTooltip: true,
+    plotLineColorGrowing: '#0FEDBE',
+    plotLineColorFalling: '#FF495B',
+    gridLineColor: 'rgba(240, 243, 250, 0)',
+    scaleFontColor: '#DBDBDB',
+    belowLineFillColorGrowing: 'rgba(15, 237, 190, 0.12)',
+    belowLineFillColorFalling: 'rgba(255, 73, 91, 0.12)',
+    belowLineFillColorGrowingBottom: 'rgba(15, 237, 190, 0)',
+    belowLineFillColorFallingBottom: 'rgba(255, 73, 91, 0)',
+    symbolActiveColor: 'rgba(15, 237, 190, 0.05)',
     tabs: [
+        {
+            title: 'AI & Tech',
+            symbols: [
+                { s: 'NASDAQ:NVDA', d: 'NVIDIA Corp' },
+                { s: 'NASDAQ:AAPL', d: 'Apple Inc' },
+                { s: 'NASDAQ:MSFT', d: 'Microsoft' },
+                { s: 'NASDAQ:GOOGL', d: 'Alphabet' },
+                { s: 'NASDAQ:META', d: 'Meta Platforms' },
+                { s: 'NASDAQ:AMD', d: 'AMD' },
+            ],
+        },
         {
             title: 'Financial',
             symbols: [
                 { s: 'NYSE:JPM', d: 'JPMorgan Chase' },
-                { s: 'NYSE:WFC', d: 'Wells Fargo Co New' },
-                { s: 'NYSE:BAC', d: 'Bank Amer Corp' },
-                { s: 'NYSE:HSBC', d: 'Hsbc Hldgs Plc' },
-                { s: 'NYSE:C', d: 'Citigroup Inc' },
-                { s: 'NYSE:MA', d: 'Mastercard Incorporated' },
+                { s: 'NYSE:V', d: 'Visa Inc' },
+                { s: 'NYSE:MA', d: 'Mastercard' },
+                { s: 'NYSE:BAC', d: 'Bank of America' },
+                { s: 'NYSE:GS', d: 'Goldman Sachs' },
+                { s: 'NASDAQ:COIN', d: 'Coinbase' },
             ],
         },
         {
-            title: 'Technology',
-            symbols: [
-                { s: 'NASDAQ:AAPL', d: 'Apple' },
-                { s: 'NASDAQ:GOOGL', d: 'Alphabet' },
-                { s: 'NASDAQ:MSFT', d: 'Microsoft' },
-                { s: 'NASDAQ:FB', d: 'Meta Platforms' },
-                { s: 'NYSE:ORCL', d: 'Oracle Corp' },
-                { s: 'NASDAQ:INTC', d: 'Intel Corp' },
-            ],
-        },
-        {
-            title: 'Services',
+            title: 'Consumer & Growth',
             symbols: [
                 { s: 'NASDAQ:AMZN', d: 'Amazon' },
-                { s: 'NYSE:BABA', d: 'Alibaba Group Hldg Ltd' },
-                { s: 'NYSE:T', d: 'At&t Inc' },
+                { s: 'NASDAQ:TSLA', d: 'Tesla' },
+                { s: 'NASDAQ:NFLX', d: 'Netflix' },
                 { s: 'NYSE:WMT', d: 'Walmart' },
-                { s: 'NYSE:V', d: 'Visa' },
+                { s: 'NYSE:PLTR', d: 'Palantir' },
             ],
         },
     ],
-    support_host: 'https://www.tradingview.com', // TradingView host
-    backgroundColor: '#141414', // background color
-    width: '100%', // full width
-    height: 600, // height in px
-    showSymbolLogo: true, // show logo next to symbols
-    showChart: true, // display mini chart
+    support_host: 'https://www.tradingview.com',
+    backgroundColor: '#141414',
+    width: '100%',
+    height: 560,
+    showSymbolLogo: true,
+    showChart: true,
 };
 
 export const HEATMAP_WIDGET_CONFIG = {
@@ -111,7 +401,7 @@ export const HEATMAP_WIDGET_CONFIG = {
     hasSymbolTooltip: true,
     isMonoSize: false,
     width: '100%',
-    height: '600',
+    height: '560',
 };
 
 export const TOP_STORIES_WIDGET_CONFIG = {
@@ -122,49 +412,48 @@ export const TOP_STORIES_WIDGET_CONFIG = {
     locale: 'en',
     market: 'stock',
     width: '100%',
-    height: '600',
+    height: '560',
 };
 
 export const MARKET_DATA_WIDGET_CONFIG = {
-    title: 'Stocks',
+    title: 'Institutional Watch',
     width: '100%',
-    height: 600,
+    height: 560,
     locale: 'en',
     showSymbolLogo: true,
     colorTheme: 'dark',
-    isTransparent: false,
-    backgroundColor: '#0F0F0F',
+    isTransparent: true,
+    backgroundColor: '#141414',
     symbolsGroups: [
         {
-            name: 'Financial',
+            name: 'AI & Semiconductors',
+            symbols: [
+                { name: 'NASDAQ:NVDA', displayName: 'NVIDIA Corp' },
+                { name: 'NASDAQ:AAPL', displayName: 'Apple Inc' },
+                { name: 'NASDAQ:MSFT', displayName: 'Microsoft' },
+                { name: 'NASDAQ:GOOGL', displayName: 'Alphabet' },
+                { name: 'NASDAQ:META', displayName: 'Meta Platforms' },
+                { name: 'NASDAQ:AMD', displayName: 'AMD' },
+            ],
+        },
+        {
+            name: 'Financial & FinTech',
             symbols: [
                 { name: 'NYSE:JPM', displayName: 'JPMorgan Chase' },
-                { name: 'NYSE:WFC', displayName: 'Wells Fargo Co New' },
-                { name: 'NYSE:BAC', displayName: 'Bank Amer Corp' },
-                { name: 'NYSE:HSBC', displayName: 'Hsbc Hldgs Plc' },
-                { name: 'NYSE:C', displayName: 'Citigroup Inc' },
-                { name: 'NYSE:MA', displayName: 'Mastercard Incorporated' },
+                { name: 'NYSE:V', displayName: 'Visa' },
+                { name: 'NYSE:MA', displayName: 'Mastercard' },
+                { name: 'NYSE:BAC', displayName: 'Bank of America' },
+                { name: 'NASDAQ:COIN', displayName: 'Coinbase' },
             ],
         },
         {
-            name: 'Technology',
-            symbols: [
-                { name: 'NASDAQ:AAPL', displayName: 'Apple' },
-                { name: 'NASDAQ:GOOGL', displayName: 'Alphabet' },
-                { name: 'NASDAQ:MSFT', displayName: 'Microsoft' },
-                { name: 'NASDAQ:FB', displayName: 'Meta Platforms' },
-                { name: 'NYSE:ORCL', displayName: 'Oracle Corp' },
-                { name: 'NASDAQ:INTC', displayName: 'Intel Corp' },
-            ],
-        },
-        {
-            name: 'Services',
+            name: 'Consumer & Cloud',
             symbols: [
                 { name: 'NASDAQ:AMZN', displayName: 'Amazon' },
-                { name: 'NYSE:BABA', displayName: 'Alibaba Group Hldg Ltd' },
-                { name: 'NYSE:T', displayName: 'At&t Inc' },
-                { name: 'NYSE:WMT', displayName: 'Walmart' },
-                { name: 'NYSE:V', displayName: 'Visa' },
+                { name: 'NASDAQ:TSLA', displayName: 'Tesla' },
+                { name: 'NASDAQ:NFLX', displayName: 'Netflix' },
+                { name: 'NYSE:PLTR', displayName: 'Palantir' },
+                { name: 'NASDAQ:CRWD', displayName: 'CrowdStrike' },
             ],
         },
     ],
@@ -196,13 +485,13 @@ export const CANDLE_CHART_WIDGET_CONFIG = (symbol: string) => ({
     theme: 'dark',
     timezone: 'Etc/UTC',
     backgroundColor: '#141414',
-    gridColor: '#141414',
+    gridColor: '#1F2229',
     watchlist: [],
-    withdateranges: false,
+    withdateranges: true,
     compareSymbols: [],
-    studies: [],
+    studies: ['STD;SMA'],
     width: '100%',
-    height: 600,
+    height: 540,
 });
 
 export const BASELINE_WIDGET_CONFIG = (symbol: string) => ({
@@ -222,19 +511,19 @@ export const BASELINE_WIDGET_CONFIG = (symbol: string) => ({
     theme: 'dark',
     timezone: 'Etc/UTC',
     backgroundColor: '#141414',
-    gridColor: '#141414',
+    gridColor: '#1F2229',
     watchlist: [],
     withdateranges: false,
     compareSymbols: [],
     studies: [],
     width: '100%',
-    height: 600,
+    height: 480,
 });
 
 export const TECHNICAL_ANALYSIS_WIDGET_CONFIG = (symbol: string) => ({
     symbol: symbol.toUpperCase(),
     colorTheme: 'dark',
-    isTransparent: 'true',
+    isTransparent: true,
     locale: 'en',
     width: '100%',
     height: 400,
@@ -245,16 +534,16 @@ export const TECHNICAL_ANALYSIS_WIDGET_CONFIG = (symbol: string) => ({
 export const COMPANY_PROFILE_WIDGET_CONFIG = (symbol: string) => ({
     symbol: symbol.toUpperCase(),
     colorTheme: 'dark',
-    isTransparent: 'true',
+    isTransparent: true,
     locale: 'en',
     width: '100%',
-    height: 440,
+    height: 420,
 });
 
 export const COMPANY_FINANCIALS_WIDGET_CONFIG = (symbol: string) => ({
     symbol: symbol.toUpperCase(),
     colorTheme: 'dark',
-    isTransparent: 'true',
+    isTransparent: true,
     locale: 'en',
     width: '100%',
     height: 464,
@@ -263,65 +552,34 @@ export const COMPANY_FINANCIALS_WIDGET_CONFIG = (symbol: string) => ({
 });
 
 export const POPULAR_STOCK_SYMBOLS = [
-    // Tech Giants (the big technology companies)
+    'NVDA',
     'AAPL',
     'MSFT',
     'GOOGL',
     'AMZN',
-    'TSLA',
     'META',
-    'NVDA',
+    'TSLA',
     'NFLX',
+    'PLTR',
+    'AMD',
+    'JPM',
+    'V',
+    'COIN',
+    'CRWD',
     'ORCL',
     'CRM',
-
-    // Growing Tech Companies
     'ADBE',
     'INTC',
-    'AMD',
     'PYPL',
     'UBER',
-    'ZOOM',
     'SPOT',
-    'SQ',
     'SHOP',
-    'ROKU',
-
-    // Newer Tech Companies
     'SNOW',
-    'PLTR',
-    'COIN',
-    'RBLX',
     'DDOG',
-    'CRWD',
     'NET',
-    'OKTA',
-    'TWLO',
-    'ZM',
-
-    // Consumer & Delivery Apps
-    'DOCU',
-    'PTON',
-    'PINS',
-    'SNAP',
-    'LYFT',
-    'DASH',
     'ABNB',
-    'RIVN',
-    'LCID',
-    'NIO',
-
-    // International Companies
-    'XPEV',
-    'LI',
+    'DASH',
     'BABA',
-    'JD',
-    'PDD',
-    'TME',
-    'BILI',
-    'DIDI',
-    'GRAB',
-    'SE',
 ];
 
 export const NO_MARKET_NEWS =
@@ -331,9 +589,9 @@ export const WATCHLIST_TABLE_HEADER = [
     'Company',
     'Symbol',
     'Price',
-    'Change',
+    '24h Change',
+    '52W Range',
     'Market Cap',
     'P/E Ratio',
-    'Alert',
-    'Action',
+    'Actions',
 ];

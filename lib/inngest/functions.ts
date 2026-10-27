@@ -78,7 +78,7 @@ export const sendSignUpEmail = inngest.createFunction(
         await step.run("send-welcome-email", async () => {
             const introText = getGeminiText(
                 response,
-                "Thanks for joining Signalist. You now have the tools to track markets and make smarter moves."
+                "Thanks for joining PulseQuant. You now have the tools to track markets and make smarter moves."
             );
 
             return await sendWelcomeEmail({

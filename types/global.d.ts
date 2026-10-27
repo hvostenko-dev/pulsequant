@@ -1,3 +1,5 @@
+import type { Control, FieldError, RegisterOptions, UseFormRegister } from 'react-hook-form';
+
 declare global {
     type SignInFormData = {
         email: string;
@@ -17,7 +19,7 @@ declare global {
     type CountrySelectProps = {
         name: string;
         label: string;
-        control: Control;
+        control: any;
         error?: FieldError;
         required?: boolean;
     };
@@ -27,7 +29,7 @@ declare global {
         label: string;
         placeholder: string;
         type?: string;
-        register: UseFormRegister;
+        register: any;
         error?: FieldError;
         validation?: RegisterOptions;
         disabled?: boolean;
@@ -44,7 +46,7 @@ declare global {
         label: string;
         placeholder: string;
         options: readonly Option[];
-        control: Control;
+        control: any;
         error?: FieldError;
         required?: boolean;
     };
@@ -56,9 +58,10 @@ declare global {
     };
 
     type SearchCommandProps = {
-        renderAs?: 'button' | 'text';
+        renderAs?: 'button' | 'text' | 'pill';
         label?: string;
         initialStocks: StockWithWatchlistStatus[];
+        className?: string;
     };
 
     type WelcomeEmailData = {
@@ -82,6 +85,30 @@ declare global {
 
     type StockWithWatchlistStatus = Stock & {
         isInWatchlist: boolean;
+    };
+
+    type EnrichedStockQuote = {
+        symbol: string;
+        name: string;
+        sector: string;
+        industry: string;
+        exchange: string;
+        price: number;
+        change: number;
+        changePercent: number;
+        high: number;
+        low: number;
+        open: number;
+        prevClose: number;
+        marketCapBillions: number;
+        peRatio: number;
+        beta: number;
+        dividendYield: number;
+        eps: number;
+        high52W: number;
+        low52W: number;
+        quantScore: number;
+        signal: 'STRONG BUY' | 'BUY' | 'HOLD' | 'VOLATILE';
     };
 
     type FinnhubSearchResult = {
@@ -113,12 +140,22 @@ declare global {
 
     type QuoteData = {
         c?: number;
+        d?: number;
         dp?: number;
+        h?: number;
+        l?: number;
+        o?: number;
+        pc?: number;
     };
 
     type ProfileData = {
         name?: string;
+        ticker?: string;
+        finnhubIndustry?: string;
+        exchange?: string;
         marketCapitalization?: number;
+        logo?: string;
+        weburl?: string;
     };
 
     type FinancialsData = {
@@ -168,15 +205,6 @@ declare global {
         news?: MarketNewsArticle[];
     };
 
-    type SearchCommandProps = {
-        open?: boolean;
-        setOpen?: (open: boolean) => void;
-        renderAs?: 'button' | 'text';
-        buttonLabel?: string;
-        buttonVariant?: 'primary' | 'secondary';
-        className?: string;
-    };
-
     type AlertData = {
         symbol: string;
         company: string;
@@ -214,6 +242,38 @@ declare global {
         alertType: 'upper' | 'lower';
         threshold: number;
         changePercent?: number;
+        active?: boolean;
+        triggered?: boolean;
+        createdAt?: string;
+    };
+
+    type PortfolioPositionRecord = {
+        id: string;
+        symbol: string;
+        company: string;
+        shares: number;
+        avgBuyPrice: number;
+        sector: string;
+        notes?: string;
+        addedAt: string;
+    };
+
+    type AIStockAnalysisReport = {
+        symbol: string;
+        company: string;
+        verdict: 'STRONG BUY' | 'ACCUMULATE' | 'HOLD' | 'CAUTIOUS';
+        confidenceScore: number;
+        targetPrice12M: number;
+        upsidePercent: number;
+        executiveSummary: string;
+        bullCase: string[];
+        bearCase: string[];
+        catalysts: string[];
+        supportLevel: number;
+        resistanceLevel: number;
+        riskRating: 'Low' | 'Moderate' | 'Elevated' | 'High';
+        generatedAt: string;
+        source: 'gemini-ai' | 'quant-engine';
     };
 }
 

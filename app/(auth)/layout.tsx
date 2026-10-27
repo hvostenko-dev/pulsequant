@@ -3,8 +3,8 @@ import Image from "next/image";
 import React from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-
 import { auth } from "@/lib/better-auth/auth";
+import { Star, ShieldCheck, Zap } from "lucide-react";
 
 const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
     const session = await auth.api.getSession({
@@ -16,61 +16,72 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <main className="auth-layout">
-            <section className="auth-left-section scrollbar-hide-default">
-                <Link href="/" className="auth-logo">
-                    <Image
-                        src="/assets/icons/logo.svg"
-                        alt="Signalist logo"
-                        width={140}
-                        height={32}
-                        priority
-                        style={{
-                            width: "auto",
-                            height: "32px",
-                        }}
-                    />
-                </Link>
+        <main className="min-h-screen flex flex-col lg:flex-row bg-[#08090C] text-gray-200">
+            {/* Left form section */}
+            <section className="w-full lg:w-[48%] xl:w-[42%] min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-16 py-8">
+                <div>
+                    <Link href="/" className="inline-block mb-10 group">
+                        <Image
+                            src="/assets/icons/logo.svg"
+                            alt="PulseQuant Logo"
+                            width={160}
+                            height={36}
+                            priority
+                            className="h-8 w-auto transition-transform group-hover:scale-[1.02]"
+                        />
+                    </Link>
+                    <div className="max-w-md w-full">{children}</div>
+                </div>
 
-                <div className="pb-6 lg:pb-8 flex-1">{children}</div>
+                <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between text-xs text-gray-500">
+                    <span>© {new Date().getFullYear()} PulseQuant Terminal</span>
+                    <span className="flex items-center gap-1.5 text-emerald-400">
+                        <ShieldCheck className="h-3.5 w-3.5" /> End-to-End Encrypted
+                    </span>
+                </div>
             </section>
 
-            <section className="auth-right-section">
-                <div className="z-10 relative lg:mt-4 lg:mb-16">
-                    <blockquote className="auth-blockquote">
-                        Signalist turned my watchlist into a winning list. The alerts are
-                        spot-on, and I feel more confident making moves in the market.
+            {/* Right showcase section */}
+            <section className="hidden lg:flex w-[52%] xl:w-[58%] min-h-screen bg-gradient-to-br from-[#12141A] to-[#0A0B0E] border-l border-white/10 p-12 xl:p-16 flex-col justify-between relative overflow-hidden">
+                <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-yellow-400/10 blur-[140px]" />
+                <div className="pointer-events-none absolute -left-24 -bottom-24 h-96 w-96 rounded-full bg-emerald-500/10 blur-[140px]" />
+
+                <div className="relative z-10 max-w-xl">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 px-3 py-1 text-xs font-semibold text-yellow-300 mb-6">
+                        <Zap className="h-3.5 w-3.5" />
+                        Institutional Equity Intelligence
+                    </div>
+
+                    <blockquote className="text-xl xl:text-2xl font-medium text-gray-200 leading-snug">
+                        &ldquo;PulseQuant replaced three fragmented market terminals for our desk. The combination of real-time TradingView charting, paper-trading risk analysis, and Gemini AI catalyst synthesis gives us an unfair edge.&rdquo;
                     </blockquote>
 
-                    <div className="flex items-center justify-between">
+                    <div className="mt-6 flex items-center justify-between">
                         <div>
-                            <cite className="auth-testimonial-author">- Ethan R.</cite>
-                            <p className="max-md:text-xs text-gray-500">Retail Investor</p>
+                            <cite className="font-bold text-white not-italic text-sm">
+                                Alexander M.
+                            </cite>
+                            <p className="text-xs text-gray-400">
+                                Senior Quantitative Portfolio Manager
+                            </p>
                         </div>
-
-                        <div className="flex items-center gap-0.5">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <Image
-                                    key={star}
-                                    src="/assets/icons/star.svg"
-                                    alt="Star"
-                                    width={20}
-                                    height={20}
-                                    className="w-5 h-5"
-                                />
+                        <div className="flex items-center gap-1 text-yellow-400">
+                            {[1, 2, 3, 4, 5].map((s) => (
+                                <Star key={s} className="h-4 w-4 fill-yellow-400" />
                             ))}
                         </div>
                     </div>
                 </div>
 
-                <div className="flex-1 relative">
+                {/* Dashboard graphic preview */}
+                <div className="relative z-10 mt-10 rounded-2xl border border-white/15 bg-black/60 p-3 shadow-2xl backdrop-blur">
                     <Image
-                        src="/assets/images/dashboard.png"
-                        alt="Dashboard Preview"
-                        width={1440}
-                        height={1150}
+                        src="/assets/images/dashboard-preview.png"
+                        alt="PulseQuant Terminal Preview"
+                        width={1024}
+                        height={640}
                         priority
-                        className="auth-dashboard-preview absolute top-0"
+                        className="rounded-xl border border-white/10 w-full h-auto object-cover"
                     />
                 </div>
             </section>
