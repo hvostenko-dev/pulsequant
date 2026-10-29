@@ -11,18 +11,19 @@ const Header = async ({ user }: { user: User }) => {
 
     return (
         <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#0A0B0E]/85 backdrop-blur-xl transition-all">
-            <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto flex h-16 max-w-[1440px] 2xl:max-w-[1600px] items-center justify-between gap-2 px-3.5 sm:px-6 lg:px-8">
                 {/* Left: Mobile Menu + Brand Logo */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                     <MobileMenu initialStocks={initialStocks} user={user} />
-                    <Link href="/" className="flex items-center gap-2 group">
+                    <Link href="/" className="flex items-center gap-2 group shrink-0">
                         <Image
                             src="/assets/icons/logo.svg"
                             alt="PulseQuant Logo"
                             width={148}
                             height={32}
                             priority
-                            className="h-7 sm:h-8 w-auto transition-transform group-hover:scale-[1.02]"
+                            style={{ width: 'auto' }}
+                            className="h-6 sm:h-8 w-auto transition-transform group-hover:scale-[1.02]"
                         />
                     </Link>
                 </div>
@@ -33,12 +34,12 @@ const Header = async ({ user }: { user: User }) => {
                 </nav>
 
                 {/* Right: Search Pill + Live Indicator + User Dropdown */}
-                <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                     <SearchCommand
                         renderAs="pill"
                         label="Quick Search"
                         initialStocks={initialStocks}
-                        className="hidden sm:flex"
+                        className="flex"
                     />
 
                     <div className="hidden xl:flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-400">

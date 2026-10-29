@@ -18,22 +18,23 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
     return (
         <main className="min-h-screen flex flex-col lg:flex-row bg-[#08090C] text-gray-200">
             {/* Left form section */}
-            <section className="w-full lg:w-[48%] xl:w-[42%] min-h-screen flex flex-col justify-between px-6 sm:px-12 lg:px-16 py-8">
+            <section className="w-full lg:w-[48%] xl:w-[42%] min-h-screen flex flex-col justify-between px-5 sm:px-10 lg:px-14 xl:px-16 py-6 sm:py-8">
                 <div>
-                    <Link href="/" className="inline-block mb-10 group">
+                    <Link href="/" className="inline-block mb-7 sm:mb-10 group">
                         <Image
                             src="/assets/icons/logo.svg"
                             alt="PulseQuant Logo"
                             width={160}
                             height={36}
                             priority
-                            className="h-8 w-auto transition-transform group-hover:scale-[1.02]"
+                            style={{ width: "auto" }}
+                            className="h-7 sm:h-8 w-auto transition-transform group-hover:scale-[1.02]"
                         />
                     </Link>
-                    <div className="max-w-md w-full">{children}</div>
+                    <div className="max-w-md w-full mx-auto lg:mx-0">{children}</div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between text-xs text-gray-500">
+                <div className="mt-8 pt-6 border-t border-white/5 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-500">
                     <span>© {new Date().getFullYear()} PulseQuant Terminal</span>
                     <span className="flex items-center gap-1.5 text-emerald-400">
                         <ShieldCheck className="h-3.5 w-3.5" /> End-to-End Encrypted
@@ -42,7 +43,7 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
             </section>
 
             {/* Right showcase section */}
-            <section className="hidden lg:flex w-[52%] xl:w-[58%] min-h-screen bg-gradient-to-br from-[#12141A] to-[#0A0B0E] border-l border-white/10 p-12 xl:p-16 flex-col justify-between relative overflow-hidden">
+            <section className="hidden lg:flex w-[52%] xl:w-[58%] min-h-screen bg-gradient-to-br from-[#12141A] to-[#0A0B0E] border-l border-white/10 p-10 xl:p-16 flex-col justify-between relative overflow-hidden">
                 <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-yellow-400/10 blur-[140px]" />
                 <div className="pointer-events-none absolute -left-24 -bottom-24 h-96 w-96 rounded-full bg-emerald-500/10 blur-[140px]" />
 
@@ -81,6 +82,7 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
                         width={1024}
                         height={640}
                         priority
+                        style={{ height: "auto" }}
                         className="rounded-xl border border-white/10 w-full h-auto object-cover"
                     />
                 </div>

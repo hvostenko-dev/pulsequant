@@ -20,6 +20,7 @@ interface AlertModalProps {
     symbol: string;
     company?: string;
     currentPrice?: number;
+    allowSymbolEdit?: boolean;
     trigger?: React.ReactNode;
 }
 
@@ -27,15 +28,19 @@ export default function AlertModal({
     symbol,
     company = '',
     currentPrice = 100,
+    allowSymbolEdit = false,
     trigger,
 }: AlertModalProps) {
     const [open, setOpen] = useState(false);
+    const [symbolInput, setSymbolInput] = useState(symbol.toUpperCase());
     const [alertType, setAlertType] = useState<'upper' | 'lower'>('upper');
     const [targetPrice, setTargetPrice] = useState(
         currentPrice > 0 ? (currentPrice * 1.05).toFixed(2) : '150.00'
     );
     const [alertName, setAlertName] = useState('');
     const [isPending, startTransition] = useTransition();
+
+    const activeSymbol = (allowSymbolEdit ? symbolInput : symbol).trim().toUpperCase() || symbol.toUpperCase();
 
     const setPreset = (percent: number) => {
         const nextPrice = (currentPrice * (1 + percent / 100)).toFixed(2);
@@ -46,6 +51,10 @@ export default function AlertModal({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const priceNum = parseFloat(targetPrice);
+        if (!activeSymbol) {
+            toast.error('Please enter a valid stock ticker symbol');
+            return;
+        }
         if (!priceNum || priceNum <= 0) {
             toast.error('Please enter a valid price threshold');
             return;
@@ -54,13 +63,13 @@ export default function AlertModal({
         startTransition(async () => {
             try {
                 await createPriceAlert({
-                    symbol,
-                    company,
+                    symbol: activeSymbol,
+                    company: activeSymbol === symbol.toUpperCase() ? company : activeSymbol,
                     alertName: alertName.trim(),
                     alertType,
                     threshold: priceNum,
                 });
-                toast.success(`Price alert created for ${symbol} at $${priceNum.toFixed(2)}`);
+                toast.success(`Price alert created for ${activeSymbol} at $${priceNum.toFixed(2)}`);
                 setOpen(false);
             } catch (err) {
                 toast.error(err instanceof Error ? err.message : 'Failed to create alert');
@@ -75,7 +84,7 @@ export default function AlertModal({
                     <Button
                         variant="outline"
                         size="sm"
-                        className="h-10 px-4 text-sm border-yellow-400/20 bg-yellow-400/10 text-yellow-300 hover:bg-yellow-400/20 hover:text-yellow-200"
+                        className="h-10 w-full sm:w-auto px-4 text-sm border-yellow-400/20 bg-yellow-400/10 text-yellow-300 hover:bg-yellow-400/20 hover:text-yellow-200"
                     >
                         <Bell className="mr-2 h-4 w-4" />
                         Set Alert
@@ -88,21 +97,37 @@ export default function AlertModal({
                         <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-yellow-400/20 bg-yellow-400/10 text-yellow-300">
                             <Bell className="h-4 w-4" />
                         </span>
-                        Set Smart Alert for {symbol}
+                        Set Smart Alert for {activeSymbol}
                     </DialogTitle>
                     <DialogDescription className="text-sm text-gray-400">
-                        Get notified when {company || symbol} crosses your target price threshold.
+                        Get notified when {activeSymbol} crosses your target price threshold.
                     </DialogDescription>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="mt-2 space-y-4">
-                    {/* Current Price Banner */}
-                    <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm">
-                        <span className="text-gray-400">Current Market Price:</span>
-                        <span className="font-mono text-base font-bold text-white">
-                            ${currentPrice.toFixed(2)}
-                        </span>
-                    </div>
+                    {allowSymbolEdit ? (
+                        <div>
+                            <Label htmlFor="alertSymbol" className="text-xs uppercase tracking-wider text-gray-400">
+                                Ticker Symbol
+                            </Label>
+                            <Input
+                                id="alertSymbol"
+                                placeholder="e.g. NVDA, AAPL, MSFT, TSLA"
+                                value={symbolInput}
+                                onChange={(e) => setSymbolInput(e.target.value.toUpperCase())}
+                                className="mt-1.5 h-11 border-white/10 bg-white/[0.05] font-mono text-base uppercase text-white placeholder:text-gray-500 focus:border-yellow-400"
+                                required
+                            />
+                        </div>
+                    ) : (
+                        /* Current Price Banner */
+                        <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm">
+                            <span className="text-gray-400">Current Market Price:</span>
+                            <span className="font-mono text-base font-bold text-white">
+                                ${currentPrice.toFixed(2)}
+                            </span>
+                        </div>
+                    )}
 
                     {/* Alert Direction Toggle */}
                     <div>

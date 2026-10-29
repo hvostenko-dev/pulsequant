@@ -10,8 +10,7 @@ import {
 import { getEnrichedStockQuote, getNews } from '@/lib/actions/finnhub.actions';
 import { getCurrentUserWatchlistSymbols } from '@/lib/actions/watchlist.actions';
 import StockTerminalActions from '@/components/StockTerminalActions';
-import { ArrowUpRight, TrendingUp, TrendingDown, Layers, Newspaper } from 'lucide-react';
-import Link from 'next/link';
+import { ArrowUpRight, TrendingUp, TrendingDown, Newspaper } from 'lucide-react';
 
 export async function generateMetadata({ params }: StockDetailsPageProps) {
     const { symbol } = await params;
@@ -48,7 +47,7 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
 
                 <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                     <div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
                             <h1 className="font-mono text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white">
                                 {symbol}
                             </h1>
@@ -63,8 +62,8 @@ export default async function StockDetails({ params }: StockDetailsPageProps) {
                             {quote.name} • {quote.industry}
                         </p>
 
-                        <div className="mt-3 flex items-baseline gap-3">
-                            <span className="font-mono text-3xl font-extrabold text-white">
+                        <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                            <span className="font-mono text-2xl sm:text-3xl font-extrabold text-white">
                                 ${quote.price.toFixed(2)}
                             </span>
                             <span

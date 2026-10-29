@@ -68,13 +68,13 @@ export default function KeyboardShortcuts() {
                 type="button"
                 onClick={() => setHelpOpen(true)}
                 aria-label="Keyboard shortcuts"
-                className="fixed bottom-4 left-4 z-30 hidden h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/60 text-gray-400 backdrop-blur transition hover:border-cyan-300/40 hover:text-cyan-300 md:flex"
+                className="fixed bottom-5 left-5 z-30 hidden h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/70 text-gray-400 backdrop-blur transition hover:border-cyan-300/40 hover:text-cyan-300 lg:flex"
             >
                 <Keyboard className="h-4 w-4" />
             </button>
 
             {pending && (
-                <div className="fixed bottom-16 left-4 z-50 rounded-lg border border-cyan-300/30 bg-black/80 px-3 py-2 font-mono text-xs text-cyan-200 backdrop-blur">
+                <div className="fixed bottom-16 left-5 z-50 rounded-lg border border-cyan-300/30 bg-black/85 px-3 py-2 font-mono text-xs text-cyan-200 backdrop-blur">
                     g → <span className="text-gray-400">h · p · s · w · a</span>
                 </div>
             )}

@@ -12,7 +12,6 @@ import {
     Bot,
     TrendingUp,
     TrendingDown,
-    ArrowUpRight,
 } from 'lucide-react';
 import {
     Dialog,
@@ -77,9 +76,9 @@ export default function StockTerminalActions({
     };
 
     return (
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="grid grid-cols-2 gap-2.5 w-full sm:w-auto sm:flex sm:flex-wrap sm:items-center">
             {/* Watchlist Toggle */}
-            <div className="w-40">
+            <div className="w-full sm:w-40">
                 <WatchlistButton symbol={symbol} company={company} isInWatchlist={isInWatchlist} />
             </div>
 
@@ -89,10 +88,10 @@ export default function StockTerminalActions({
             {/* Quick Add to Portfolio */}
             <Button
                 variant="outline"
-                size="sm" 
+                size="sm"
                 onClick={handleQuickAddToPortfolio}
                 disabled={isPendingPortfolio}
-                className="h-10 px-4 text-sm border-emerald-400/20 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20"
+                className="h-10 w-full sm:w-auto px-4 text-sm border-emerald-400/20 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20"
             >
                 {isPendingPortfolio ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -106,9 +105,9 @@ export default function StockTerminalActions({
 
             {/* AI Research Brief */}
             <Button
-                size="sm" 
+                size="sm"
                 onClick={handleOpenAIReport}
-                className="h-10 px-4 text-sm bg-gradient-to-r from-yellow-400 to-amber-500 font-bold text-black hover:from-yellow-300 hover:to-amber-400 shadow-md shadow-yellow-400/10"
+                className="h-10 w-full sm:w-auto px-4 text-sm bg-gradient-to-r from-yellow-400 to-amber-500 font-bold text-black hover:from-yellow-300 hover:to-amber-400 shadow-md shadow-yellow-400/10"
             >
                 <Sparkles className="mr-2 h-4 w-4" />
                 Gemini AI Report
@@ -190,7 +189,25 @@ export default function StockTerminalActions({
                                 </div>
                             </div>
 
-                            <div className="rounded-xl border border-white/10 bg-black/40 p-3.5 flex items-center justify-between text-xs">
+                            {report.catalysts && report.catalysts.length > 0 && (
+                                <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4 space-y-2">
+                                    <h4 className="flex items-center gap-1.5 text-xs font-bold text-yellow-300 uppercase tracking-wider">
+                                        <Sparkles className="h-3.5 w-3.5" /> Upcoming Catalysts
+                                    </h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {report.catalysts.map((cat, idx) => (
+                                            <span
+                                                key={idx}
+                                                className="rounded-lg border border-white/10 bg-black/40 px-2.5 py-1 text-xs text-gray-300"
+                                            >
+                                                {cat}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="rounded-xl border border-white/10 bg-black/40 p-3.5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs">
                                 <div>Support: <span className="font-mono text-emerald-400 font-bold">${report.supportLevel}</span></div>
                                 <div>Resistance: <span className="font-mono text-red-400 font-bold">${report.resistanceLevel}</span></div>
                                 <div>Risk Rating: <span className="text-yellow-300 font-bold">{report.riskRating}</span></div>

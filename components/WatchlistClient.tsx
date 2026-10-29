@@ -1,25 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 import Link from 'next/link';
 import {
     Star,
     Search,
-    TrendingUp,
-    TrendingDown,
     ArrowUpRight,
     LayoutGrid,
     Table as TableIcon,
     Bell,
-    Building2,
-    CalendarDays,
-    BarChart3,
     Sparkles,
+    Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WatchlistButton from '@/components/WatchlistButton';
 import AlertModal from '@/components/AlertModal';
-import { WatchlistRecord } from '@/lib/actions/watchlist.actions';
+import { WatchlistRecord, seedDemoWatchlist } from '@/lib/actions/watchlist.actions';
+import { toast } from 'sonner';
 
 interface WatchlistClientProps {
     stocks: WatchlistRecord[];
@@ -30,6 +27,18 @@ interface WatchlistClientProps {
 export default function WatchlistClient({ stocks, quotesMap, news }: WatchlistClientProps) {
     const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
     const [filterQuery, setFilterQuery] = useState('');
+    const [isPending, startTransition] = useTransition();
+
+    const handleSeedDemo = () => {
+        startTransition(async () => {
+            try {
+                const res = await seedDemoWatchlist();
+                toast.success(`Added ${res.count} institutional watchlist stocks!`);
+            } catch (err) {
+                toast.error(err instanceof Error ? err.message : 'Failed to seed demo watchlist');
+            }
+        });
+    };
 
     const enriched = stocks.map((item) => {
         const q = quotesMap[item.symbol];
@@ -81,6 +90,16 @@ export default function WatchlistClient({ stocks, quotesMap, news }: WatchlistCl
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3">
+                        {stocks.length === 0 && (
+                            <Button
+                                onClick={handleSeedDemo}
+                                disabled={isPending}
+                                className="h-10 px-4 text-sm bg-emerald-400 font-bold text-black hover:bg-emerald-300"
+                            >
+                                {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                                Load Demo Watchlist
+                            </Button>
+                        )}
                         <Link
                             href="/screener"
                             className="inline-flex items-center gap-2 rounded-xl bg-yellow-400 px-4 py-2.5 text-xs sm:text-sm font-bold text-black transition hover:bg-yellow-300"
@@ -93,15 +112,15 @@ export default function WatchlistClient({ stocks, quotesMap, news }: WatchlistCl
 
                 {/* KPI Strip */}
                 <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                    <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
                         <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Total Tracked</p>
-                        <p className="mt-2 text-3xl font-black text-white font-mono">{stocks.length}</p>
+                        <p className="mt-2 text-2xl sm:text-3xl font-black text-white font-mono">{stocks.length}</p>
                         <p className="mt-1 text-xs text-gray-500">Companies saved to database</p>
                     </div>
-                    <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
                         <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Average 24h Return</p>
                         <p
-                            className={`mt-2 text-3xl font-black font-mono ${
+                            className={`mt-2 text-2xl sm:text-3xl font-black font-mono ${
                                 averagePerformance >= 0 ? 'text-emerald-400' : 'text-red-400'
                             }`}
                         >
@@ -109,11 +128,11 @@ export default function WatchlistClient({ stocks, quotesMap, news }: WatchlistCl
                         </p>
                         <p className="mt-1 text-xs text-gray-500">Across all saved positions</p>
                     </div>
-                    <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
                         <p className="text-xs font-semibold uppercase tracking-wider text-yellow-400">Market Feed</p>
                         <div className="mt-2 flex items-center gap-2">
                             <span className="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                            <p className="text-2xl font-bold text-white">Streaming Live</p>
+                            <p className="text-xl sm:text-2xl font-bold text-white">Streaming Live</p>
                         </div>
                         <p className="mt-1 text-xs text-gray-500">Real-time Finnhub quote updates</p>
                     </div>
@@ -163,104 +182,187 @@ export default function WatchlistClient({ stocks, quotesMap, news }: WatchlistCl
                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]"><Star className="h-7 w-7 text-gray-500" /></div>
                     <h3 className="mt-4 text-lg font-bold text-white">Your watchlist is empty</h3>
                     <p className="mt-1 text-sm text-gray-400 max-w-md mx-auto">
-                        Search any stock symbol (or press ⌘K) and tap the star to add companies to your personal tracker.
+                        Search any stock symbol (or press ⌘K) and tap the star to add companies to your personal tracker, or load our institutional demo list below.
                     </p>
-                    <Link
-                        href="/"
-                        className="mt-5 inline-flex items-center gap-2 rounded-xl bg-yellow-400 px-5 py-2.5 text-sm font-bold text-black transition hover:bg-yellow-300"
-                    >
-                        <Search className="h-4 w-4" />
-                        Explore Top Equities
-                    </Link>
+                    <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+                        <Button
+                            onClick={handleSeedDemo}
+                            disabled={isPending}
+                            className="h-10 px-5 text-sm bg-yellow-400 font-bold text-black hover:bg-yellow-300"
+                        >
+                            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                            Load Demo Watchlist
+                        </Button>
+                        <Link
+                            href="/screener"
+                            className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.05] px-4 text-sm font-semibold text-gray-200 transition hover:bg-white/[0.1] hover:text-white"
+                        >
+                            <Search className="h-4 w-4" />
+                            Explore Top Equities
+                        </Link>
+                    </div>
                 </div>
             ) : viewMode === 'table' ? (
-                /* Table View */
-                <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/40">
-                    <table className="w-full text-left text-sm font-mono">
-                        <thead className="border-b border-white/10 bg-white/[0.02] text-xs uppercase tracking-wider text-gray-400">
-                            <tr>
-                                <th className="p-4 font-sans">Symbol / Company</th>
-                                <th className="p-4">Price</th>
-                                <th className="p-4">24h Change</th>
-                                <th className="p-4">Market Cap</th>
-                                <th className="p-4">P/E Ratio</th>
-                                <th className="p-4">Quant Rating</th>
-                                <th className="p-4 text-right font-sans">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-white/5">
-                            {filtered.map((stock) => {
-                                const isUp = stock.change >= 0;
-                                return (
-                                    <tr key={stock.symbol} className="transition hover:bg-white/[0.03]">
-                                        <td className="p-4 font-sans">
-                                            <Link
-                                                href={`/stocks/${stock.symbol}`}
-                                                className="group inline-flex items-center gap-1.5 font-mono font-bold text-white hover:text-yellow-300"
-                                            >
-                                                {stock.symbol}
-                                                <ArrowUpRight className="h-3.5 w-3.5 text-gray-500 group-hover:text-yellow-300 transition-colors" />
-                                            </Link>
-                                            <p className="truncate text-xs text-gray-400 max-w-[160px] font-sans">
+                <>
+                    {/* Mobile Cards (< 640px) even when in Table mode so phones never scroll horizontally */}
+                    <div className="grid gap-3 sm:hidden">
+                        {filtered.map((stock) => {
+                            const isUp = stock.change >= 0;
+                            return (
+                                <div
+                                    key={stock.symbol}
+                                    className="rounded-2xl border border-white/10 bg-black/40 p-4 space-y-3"
+                                >
+                                    <div className="flex items-start justify-between">
+                                        <Link href={`/stocks/${stock.symbol}`} className="min-w-0">
+                                            <div className="flex items-center gap-1.5">
+                                                <span className="font-mono text-base font-bold text-white">
+                                                    {stock.symbol}
+                                                </span>
+                                                <ArrowUpRight className="h-3.5 w-3.5 text-gray-500" />
+                                            </div>
+                                            <p className="truncate text-xs text-gray-400 max-w-[180px]">
                                                 {stock.company}
                                             </p>
-                                        </td>
-                                        <td className="p-4 text-white font-bold">${stock.price.toFixed(2)}</td>
-                                        <td className="p-4">
-                                            <span
-                                                className={`inline-flex items-center font-bold ${
-                                                    isUp ? 'text-emerald-400' : 'text-red-400'
-                                                }`}
-                                            >
+                                        </Link>
+
+                                        <div className="flex items-center gap-1">
+                                            <AlertModal
+                                                symbol={stock.symbol}
+                                                company={stock.company}
+                                                currentPrice={stock.price}
+                                                trigger={
+                                                    <button
+                                                        type="button"
+                                                        className="watchlist-icon-btn"
+                                                        title="Set Alert"
+                                                    >
+                                                        <Bell className="h-4 w-4" />
+                                                    </button>
+                                                }
+                                            />
+                                            <WatchlistButton
+                                                symbol={stock.symbol}
+                                                company={stock.company}
+                                                isInWatchlist
+                                                showTrashIcon
+                                                type="icon"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-baseline justify-between border-t border-white/5 pt-2.5 font-mono">
+                                        <div>
+                                            <span className="text-[10px] uppercase text-gray-500 font-sans block">Live Price</span>
+                                            <span className="text-base font-bold text-white">${stock.price.toFixed(2)}</span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-[10px] uppercase text-gray-500 font-sans block">24h Change</span>
+                                            <span className={`text-sm font-bold ${isUp ? 'text-emerald-400' : 'text-red-400'}`}>
                                                 {isUp ? '+' : ''}{stock.changePercent.toFixed(2)}%
                                             </span>
-                                        </td>
-                                        <td className="p-4 text-gray-300">{stock.marketCap}</td>
-                                        <td className="p-4 text-gray-300">{stock.peRatio}</td>
-                                        <td className="p-4">
-                                            <span
-                                                className={`rounded-md px-2 py-0.5 text-[11px] font-bold ${
-                                                    stock.signal === 'STRONG BUY'
-                                                        ? 'border border-emerald-400/30 bg-emerald-500/15 text-emerald-300'
-                                                        : stock.signal === 'BUY'
-                                                        ? 'border border-teal-400/30 bg-teal-500/15 text-teal-300'
-                                                        : 'border border-yellow-400/30 bg-yellow-500/15 text-yellow-300'
-                                                }`}
-                                            >
-                                                {stock.signal} ({stock.quantScore})
-                                            </span>
-                                        </td>
-                                        <td className="p-4 text-right font-sans">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <AlertModal
-                                                    symbol={stock.symbol}
-                                                    company={stock.company}
-                                                    currentPrice={stock.price}
-                                                    trigger={
-                                                        <button
-                                                            type="button"
-                                                            className="watchlist-icon-btn"
-                                                            title="Set Alert"
-                                                        >
-                                                            <Bell className="h-4 w-4" />
-                                                        </button>
-                                                    }
-                                                />
-                                                <WatchlistButton
-                                                    symbol={stock.symbol}
-                                                    company={stock.company}
-                                                    isInWatchlist
-                                                    showTrashIcon
-                                                    type="icon"
-                                                />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between text-xs font-mono text-gray-400">
+                                        <span>MCap: <strong className="text-gray-200">{stock.marketCap}</strong> • P/E: <strong className="text-gray-200">{stock.peRatio}</strong></span>
+                                        <span className="rounded bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-bold text-emerald-300">
+                                            {stock.signal} ({stock.quantScore})
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/* Desktop/Tablet Table View (>= 640px) */}
+                    <div className="hidden sm:block overflow-x-auto rounded-2xl border border-white/10 bg-black/40">
+                        <table className="w-full text-left text-sm font-mono">
+                            <thead className="border-b border-white/10 bg-white/[0.02] text-xs uppercase tracking-wider text-gray-400">
+                                <tr>
+                                    <th className="p-4 font-sans">Symbol / Company</th>
+                                    <th className="p-4">Price</th>
+                                    <th className="p-4">24h Change</th>
+                                    <th className="p-4">Market Cap</th>
+                                    <th className="p-4">P/E Ratio</th>
+                                    <th className="p-4">Quant Rating</th>
+                                    <th className="p-4 text-right font-sans">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/5">
+                                {filtered.map((stock) => {
+                                    const isUp = stock.change >= 0;
+                                    return (
+                                        <tr key={stock.symbol} className="transition hover:bg-white/[0.03]">
+                                            <td className="p-4 font-sans">
+                                                <Link
+                                                    href={`/stocks/${stock.symbol}`}
+                                                    className="group inline-flex items-center gap-1.5 font-mono font-bold text-white hover:text-yellow-300"
+                                                >
+                                                    {stock.symbol}
+                                                    <ArrowUpRight className="h-3.5 w-3.5 text-gray-500 group-hover:text-yellow-300 transition-colors" />
+                                                </Link>
+                                                <p className="truncate text-xs text-gray-400 max-w-[160px] font-sans">
+                                                    {stock.company}
+                                                </p>
+                                            </td>
+                                            <td className="p-4 text-white font-bold">${stock.price.toFixed(2)}</td>
+                                            <td className="p-4">
+                                                <span
+                                                    className={`inline-flex items-center font-bold ${
+                                                        isUp ? 'text-emerald-400' : 'text-red-400'
+                                                    }`}
+                                                >
+                                                    {isUp ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                                                </span>
+                                            </td>
+                                            <td className="p-4 text-gray-300">{stock.marketCap}</td>
+                                            <td className="p-4 text-gray-300">{stock.peRatio}</td>
+                                            <td className="p-4">
+                                                <span
+                                                    className={`rounded-md px-2 py-0.5 text-[11px] font-bold ${
+                                                        stock.signal === 'STRONG BUY'
+                                                            ? 'border border-emerald-400/30 bg-emerald-500/15 text-emerald-300'
+                                                            : stock.signal === 'BUY'
+                                                            ? 'border border-teal-400/30 bg-teal-500/15 text-teal-300'
+                                                            : 'border border-yellow-400/30 bg-yellow-500/15 text-yellow-300'
+                                                    }`}
+                                                >
+                                                    {stock.signal} ({stock.quantScore})
+                                                </span>
+                                            </td>
+                                            <td className="p-4 text-right font-sans">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <AlertModal
+                                                        symbol={stock.symbol}
+                                                        company={stock.company}
+                                                        currentPrice={stock.price}
+                                                        trigger={
+                                                            <button
+                                                                type="button"
+                                                                className="watchlist-icon-btn"
+                                                                title="Set Alert"
+                                                            >
+                                                                <Bell className="h-4 w-4" />
+                                                            </button>
+                                                        }
+                                                    />
+                                                    <WatchlistButton
+                                                        symbol={stock.symbol}
+                                                        company={stock.company}
+                                                        isInWatchlist
+                                                        showTrashIcon
+                                                        type="icon"
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                </>
             ) : (
                 /* Grid View */
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

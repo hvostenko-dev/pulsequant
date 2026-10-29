@@ -4,8 +4,6 @@ import React, { useState, useTransition } from 'react';
 import Link from 'next/link';
 import {
     Briefcase,
-    TrendingUp,
-    TrendingDown,
     Plus,
     Trash2,
     Sparkles,
@@ -13,8 +11,6 @@ import {
     PieChart,
     Calculator,
     Loader2,
-    DollarSign,
-    ShieldAlert,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -279,45 +275,45 @@ export default function PortfolioClient({ positions, quotes }: PortfolioClientPr
 
                 {/* KPI Cards Strip */}
                 <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
                         <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Total Portfolio Value</p>
-                        <p className="mt-2 text-3xl font-black text-white font-mono">
+                        <p className="mt-2 text-2xl sm:text-3xl font-black text-white font-mono truncate">
                             ${totalCurrentValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
-                        <p className="mt-1 text-xs text-gray-500">
+                        <p className="mt-1 text-xs text-gray-500 truncate">
                             Cost Basis: ${totalCostBasis.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
                     </div>
 
-                    <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
                         <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Total Unrealized P&L</p>
-                        <div className="mt-2 flex items-baseline gap-2">
-                            <p className={`text-3xl font-black font-mono ${totalPnl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                            <p className={`text-2xl sm:text-3xl font-black font-mono ${totalPnl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                                 {totalPnl >= 0 ? '+' : ''}${totalPnl.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </p>
-                            <span className={`text-sm font-bold font-mono ${totalPnlPercent >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                            <span className={`text-xs sm:text-sm font-bold font-mono ${totalPnlPercent >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                                 ({totalPnlPercent >= 0 ? '+' : ''}{totalPnlPercent.toFixed(2)}%)
                             </span>
                         </div>
                         <p className="mt-1 text-xs text-gray-500">All-time position returns</p>
                     </div>
 
-                    <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
                         <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Today&apos;s Return</p>
-                        <div className="mt-2 flex items-baseline gap-2">
-                            <p className={`text-3xl font-black font-mono ${totalDayChange >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                            <p className={`text-2xl sm:text-3xl font-black font-mono ${totalDayChange >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                                 {totalDayChange >= 0 ? '+' : ''}${totalDayChange.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </p>
-                            <span className={`text-sm font-bold font-mono ${totalDayChangePercent >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                            <span className={`text-xs sm:text-sm font-bold font-mono ${totalDayChangePercent >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                                 ({totalDayChangePercent >= 0 ? '+' : ''}{totalDayChangePercent.toFixed(2)}%)
                             </span>
                         </div>
                         <p className="mt-1 text-xs text-gray-500">Active session intraday movement</p>
                     </div>
 
-                    <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
                         <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Holdings Count</p>
-                        <p className="mt-2 text-3xl font-black text-white font-mono">
+                        <p className="mt-2 text-2xl sm:text-3xl font-black text-white font-mono">
                             {positions.length} <span className="text-base font-normal text-gray-400">stocks</span>
                         </p>
                         <p className="mt-1 text-xs text-gray-500">
@@ -366,71 +362,138 @@ export default function PortfolioClient({ positions, quotes }: PortfolioClientPr
                             </Button>
                         </div>
                     ) : (
-                        <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/40">
-                            <table className="w-full text-left text-sm">
-                                <thead className="border-b border-white/10 bg-white/[0.02] text-xs uppercase tracking-wider text-gray-400">
-                                    <tr>
-                                        <th className="p-4">Symbol / Company</th>
-                                        <th className="p-4">Shares</th>
-                                        <th className="p-4">Avg Cost</th>
-                                        <th className="p-4">Market Price</th>
-                                        <th className="p-4">Market Value</th>
-                                        <th className="p-4">Unrealized P&L</th>
-                                        <th className="p-4 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-white/5 font-mono">
-                                    {enrichedHoldings.map((h) => {
-                                        const isPositive = h.pnl >= 0;
-                                        return (
-                                            <tr key={h.symbol} className="transition hover:bg-white/[0.03]">
-                                                <td className="p-4 font-sans">
+                        <>
+                            {/* Mobile Card List (< 768px) */}
+                            <div className="grid gap-3 md:hidden">
+                                {enrichedHoldings.map((h) => {
+                                    const isPositive = h.pnl >= 0;
+                                    return (
+                                        <div
+                                            key={h.symbol}
+                                            className="rounded-2xl border border-white/10 bg-black/40 p-4 space-y-3"
+                                        >
+                                            <div className="flex items-start justify-between gap-2">
+                                                <div className="min-w-0">
                                                     <Link
                                                         href={`/stocks/${h.symbol}`}
-                                                        className="group inline-flex items-center gap-2 font-mono font-bold text-white hover:text-yellow-300"
+                                                        className="inline-flex items-center gap-1.5 font-mono text-base font-bold text-white hover:text-yellow-300"
                                                     >
                                                         {h.symbol}
-                                                        <ArrowUpRight className="h-3.5 w-3.5 text-gray-500 group-hover:text-yellow-300 transition-colors" />
+                                                        <ArrowUpRight className="h-3.5 w-3.5 text-gray-500" />
                                                     </Link>
-                                                    <p className="truncate text-xs text-gray-400 max-w-[140px] font-sans">
-                                                        {h.company}
-                                                    </p>
+                                                    <p className="truncate text-xs text-gray-400">{h.company}</p>
                                                     {h.notes && (
-                                                        <p className="mt-0.5 text-[10px] text-gray-500 italic max-w-[140px] truncate font-sans">
+                                                        <p className="mt-0.5 truncate text-[11px] italic text-gray-500">
                                                             {h.notes}
                                                         </p>
                                                     )}
-                                                </td>
-                                                <td className="p-4 text-gray-200">{h.shares}</td>
-                                                <td className="p-4 text-gray-400">${h.avgBuyPrice.toFixed(2)}</td>
-                                                <td className="p-4 text-white font-bold">${h.currentPrice.toFixed(2)}</td>
-                                                <td className="p-4 text-white font-bold">
-                                                    ${h.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                </td>
-                                                <td className="p-4">
-                                                    <div className={`font-bold ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
-                                                        {isPositive ? '+' : ''}${h.pnl.toFixed(2)}
-                                                    </div>
-                                                    <div className={`text-xs ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
-                                                        ({isPositive ? '+' : ''}{h.pnlPercent.toFixed(2)}%)
-                                                    </div>
-                                                </td>
-                                                <td className="p-4 text-right">
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleRemove(h.symbol)}
-                                                        className="rounded-lg p-2 text-gray-500 transition hover:bg-red-500/10 hover:text-red-400"
-                                                        title="Delete Position"
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRemove(h.symbol)}
+                                                    className="rounded-lg p-2 text-gray-500 transition hover:bg-red-500/10 hover:text-red-400"
+                                                    title="Delete Position"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </button>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-2.5 rounded-xl border border-white/5 bg-white/[0.02] p-3 font-mono text-xs">
+                                                <div>
+                                                    <span className="block text-[10px] uppercase text-gray-500 font-sans">Market Value</span>
+                                                    <span className="text-sm font-bold text-white">
+                                                        ${h.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    </span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span className="block text-[10px] uppercase text-gray-500 font-sans">Unrealized P&L</span>
+                                                    <span className={`text-sm font-bold ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                        {isPositive ? '+' : ''}${h.pnl.toFixed(2)} ({isPositive ? '+' : ''}{h.pnlPercent.toFixed(1)}%)
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span className="block text-[10px] uppercase text-gray-500 font-sans">Shares / Avg Cost</span>
+                                                    <span className="text-gray-300">
+                                                        {h.shares} @ ${h.avgBuyPrice.toFixed(2)}
+                                                    </span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span className="block text-[10px] uppercase text-gray-500 font-sans">Live Price</span>
+                                                    <span className="text-white font-semibold">${h.currentPrice.toFixed(2)}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Desktop Table (>= 768px) */}
+                            <div className="hidden md:block overflow-x-auto rounded-2xl border border-white/10 bg-black/40">
+                                <table className="w-full text-left text-sm">
+                                    <thead className="border-b border-white/10 bg-white/[0.02] text-xs uppercase tracking-wider text-gray-400">
+                                        <tr>
+                                            <th className="p-4">Symbol / Company</th>
+                                            <th className="p-4">Shares</th>
+                                            <th className="p-4">Avg Cost</th>
+                                            <th className="p-4">Market Price</th>
+                                            <th className="p-4">Market Value</th>
+                                            <th className="p-4">Unrealized P&L</th>
+                                            <th className="p-4 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5 font-mono">
+                                        {enrichedHoldings.map((h) => {
+                                            const isPositive = h.pnl >= 0;
+                                            return (
+                                                <tr key={h.symbol} className="transition hover:bg-white/[0.03]">
+                                                    <td className="p-4 font-sans">
+                                                        <Link
+                                                            href={`/stocks/${h.symbol}`}
+                                                            className="group inline-flex items-center gap-2 font-mono font-bold text-white hover:text-yellow-300"
+                                                        >
+                                                            {h.symbol}
+                                                            <ArrowUpRight className="h-3.5 w-3.5 text-gray-500 group-hover:text-yellow-300 transition-colors" />
+                                                        </Link>
+                                                        <p className="truncate text-xs text-gray-400 max-w-[160px] font-sans">
+                                                            {h.company}
+                                                        </p>
+                                                        {h.notes && (
+                                                            <p className="mt-0.5 text-[10px] text-gray-500 italic max-w-[160px] truncate font-sans">
+                                                                {h.notes}
+                                                            </p>
+                                                        )}
+                                                    </td>
+                                                    <td className="p-4 text-gray-200">{h.shares}</td>
+                                                    <td className="p-4 text-gray-400">${h.avgBuyPrice.toFixed(2)}</td>
+                                                    <td className="p-4 text-white font-bold">${h.currentPrice.toFixed(2)}</td>
+                                                    <td className="p-4 text-white font-bold">
+                                                        ${h.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    </td>
+                                                    <td className="p-4">
+                                                        <div className={`font-bold ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                            {isPositive ? '+' : ''}${h.pnl.toFixed(2)}
+                                                        </div>
+                                                        <div className={`text-xs ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                            ({isPositive ? '+' : ''}{h.pnlPercent.toFixed(2)}%)
+                                                        </div>
+                                                    </td>
+                                                    <td className="p-4 text-right">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleRemove(h.symbol)}
+                                                            className="rounded-lg p-2 text-gray-500 transition hover:bg-red-500/10 hover:text-red-400"
+                                                            title="Delete Position"
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </>
                     )}
                 </div>
 

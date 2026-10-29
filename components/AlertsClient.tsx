@@ -11,7 +11,6 @@ import {
     Clock,
     Plus,
     Sparkles,
-    AlertCircle,
     Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -102,6 +101,7 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
                             symbol="NVDA"
                             company="NVIDIA Corporation"
                             currentPrice={138.60}
+                            allowSymbolEdit
                             trigger={
                                 <Button className="h-10 px-4 text-sm bg-yellow-400 font-bold text-black hover:bg-yellow-300">
                                     <Plus className="mr-2 h-4 w-4" />
@@ -114,19 +114,19 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
 
                 {/* KPI Strip */}
                 <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                    <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
                         <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Total Configured</p>
-                        <p className="mt-2 text-3xl font-black text-white font-mono">{alerts.length}</p>
+                        <p className="mt-2 text-2xl sm:text-3xl font-black text-white font-mono">{alerts.length}</p>
                         <p className="mt-1 text-xs text-gray-500">Active monitoring pipelines</p>
                     </div>
-                    <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
                         <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Armed & Live</p>
-                        <p className="mt-2 text-3xl font-black text-emerald-400 font-mono">{activeCount}</p>
+                        <p className="mt-2 text-2xl sm:text-3xl font-black text-emerald-400 font-mono">{activeCount}</p>
                         <p className="mt-1 text-xs text-gray-500">Monitoring real-time ticks</p>
                     </div>
-                    <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-black/40 p-4 sm:p-5">
                         <p className="text-xs font-semibold uppercase tracking-wider text-yellow-400">Triggered Targets</p>
-                        <p className="mt-2 text-3xl font-black text-yellow-400 font-mono">{triggeredCount}</p>
+                        <p className="mt-2 text-2xl sm:text-3xl font-black text-yellow-400 font-mono">{triggeredCount}</p>
                         <p className="mt-1 text-xs text-gray-500">Conditions met at current price</p>
                     </div>
                 </div>
@@ -167,7 +167,7 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
                                 }`}
                             >
                                 <div className="flex items-start justify-between gap-3">
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-3 min-w-0">
                                         <div
                                             className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-bold ${
                                                 isTriggered
@@ -185,8 +185,8 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
                                                 <ArrowDownRight className="h-5 w-5" />
                                             )}
                                         </div>
-                                        <div>
-                                            <div className="flex items-center gap-2">
+                                        <div className="min-w-0">
+                                            <div className="flex flex-wrap items-center gap-2">
                                                 <Link
                                                     href={`/stocks/${alert.symbol}`}
                                                     className="font-mono text-lg font-bold text-white hover:text-yellow-300 transition-colors"
@@ -211,7 +211,7 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-1 shrink-0">
                                         <button
                                             type="button"
                                             onClick={() => handleToggle(alert.id, !!alert.active)}
@@ -234,18 +234,18 @@ export default function AlertsClient({ alerts }: AlertsClientProps) {
                                 {/* Price target and distance */}
                                 <div className="mt-4 grid grid-cols-2 gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3 text-xs font-mono">
                                     <div>
-                                        <span className="text-gray-500 block text-[10px] uppercase">Current Price</span>
+                                        <span className="text-gray-500 block text-[10px] uppercase font-sans">Current Price</span>
                                         <span className="text-sm font-bold text-white">${alert.currentPrice.toFixed(2)}</span>
                                     </div>
                                     <div>
-                                        <span className="text-gray-500 block text-[10px] uppercase">
+                                        <span className="text-gray-500 block text-[10px] uppercase font-sans">
                                             {isUpper ? 'Target Level (Above)' : 'Floor Level (Below)'}
                                         </span>
                                         <span className="text-sm font-bold text-yellow-300">${alert.threshold.toFixed(2)}</span>
                                     </div>
                                 </div>
 
-                                <div className="mt-3 flex items-center justify-between text-xs">
+                                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs">
                                     <span className="text-gray-400">Distance to trigger:</span>
                                     <span
                                         className={`font-mono font-bold ${

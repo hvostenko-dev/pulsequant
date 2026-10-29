@@ -8,11 +8,8 @@ import {
     TrendingUp,
     TrendingDown,
     ArrowUpRight,
-    SlidersHorizontal,
     Bot,
     Loader2,
-    ShieldCheck,
-    Target,
     Layers,
     Check,
 } from 'lucide-react';
@@ -187,11 +184,13 @@ export default function ScreenerClient({ initialQuotes }: ScreenerClientProps) {
                         </button>
                     </div>
 
-                    <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                         {compareQuotes.map((c) => (
-                            <div key={c.symbol} className="rounded-xl border border-white/10 bg-white/[0.02] p-3 text-xs space-y-1.5">
+                            <div key={c.symbol} className="rounded-xl border border-white/10 bg-white/[0.02] p-3.5 text-xs space-y-1.5">
                                 <div className="flex items-center justify-between">
-                                    <span className="font-mono font-bold text-white text-sm">{c.symbol}</span>
+                                    <Link href={`/stocks/${c.symbol}`} className="font-mono font-bold text-white text-sm hover:text-yellow-300">
+                                        {c.symbol}
+                                    </Link>
                                     <span className="font-mono text-emerald-400 font-bold">${c.price.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-gray-400">
@@ -213,7 +212,7 @@ export default function ScreenerClient({ initialQuotes }: ScreenerClientProps) {
                                 <Button
                                     size="sm"
                                     onClick={() => handleGenerateAIReport(c.symbol)}
-                                    className="w-full mt-2 bg-yellow-400/10 border border-yellow-400/20 text-yellow-300 hover:bg-yellow-400/20 text-[11px] h-7"
+                                    className="w-full mt-2 bg-yellow-400/10 border border-yellow-400/20 text-yellow-300 hover:bg-yellow-400/20 text-[11px] h-8"
                                 >
                                     <Bot className="mr-1 h-3 w-3" />
                                     AI Report
@@ -224,8 +223,110 @@ export default function ScreenerClient({ initialQuotes }: ScreenerClientProps) {
                 </section>
             )}
 
-            {/* Screener Results Table */}
-            <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/40">
+            {/* Mobile Screener Cards (< 768px) */}
+            <div className="grid gap-3 md:hidden">
+                {filtered.length === 0 ? (
+                    <div className="rounded-2xl border border-white/10 bg-black/40 py-12 text-center text-sm text-gray-500">
+                        No tickers match your filter criteria.
+                    </div>
+                ) : (
+                    filtered.map((stock) => {
+                        const isUp = stock.change >= 0;
+                        const isSelected = compareSymbols.includes(stock.symbol);
+                        return (
+                            <div
+                                key={stock.symbol}
+                                className="rounded-2xl border border-white/10 bg-black/40 p-4 space-y-3"
+                            >
+                                <div className="flex items-start justify-between gap-2">
+                                    <div className="flex items-start gap-2.5 min-w-0">
+                                        <button
+                                            type="button"
+                                            onClick={() => toggleCompare(stock.symbol)}
+                                            aria-label={`Compare ${stock.symbol}`}
+                                            className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded border transition ${
+                                                isSelected
+                                                    ? 'border-yellow-400 bg-yellow-400 text-black'
+                                                    : 'border-white/20 bg-transparent text-transparent hover:border-white/40'
+                                            }`}
+                                        >
+                                            <Check className="h-3.5 w-3.5" />
+                                        </button>
+                                        <div className="min-w-0">
+                                            <div className="flex items-center gap-2">
+                                                <Link
+                                                    href={`/stocks/${stock.symbol}`}
+                                                    className="inline-flex items-center gap-1 font-mono text-base font-bold text-white hover:text-yellow-300"
+                                                >
+                                                    {stock.symbol}
+                                                    <ArrowUpRight className="h-3.5 w-3.5 text-gray-500" />
+                                                </Link>
+                                                <span className="rounded bg-white/5 px-1.5 py-0.5 text-[10px] text-gray-400 font-mono">
+                                                    {stock.sector}
+                                                </span>
+                                            </div>
+                                            <p className="truncate text-xs text-gray-400">{stock.name}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="text-right font-mono shrink-0">
+                                        <p className="text-base font-bold text-white">${stock.price.toFixed(2)}</p>
+                                        <p className={`text-xs font-bold ${isUp ? 'text-emerald-400' : 'text-red-400'}`}>
+                                            {isUp ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-2 rounded-xl border border-white/5 bg-white/[0.02] p-2.5 font-mono text-xs">
+                                    <div>
+                                        <span className="block text-[10px] uppercase text-gray-500 font-sans">MCap</span>
+                                        <span className="text-gray-200">${stock.marketCapBillions}B</span>
+                                    </div>
+                                    <div>
+                                        <span className="block text-[10px] uppercase text-gray-500 font-sans">P/E Ratio</span>
+                                        <span className="text-gray-200">{stock.peRatio}x</span>
+                                    </div>
+                                    <div>
+                                        <span className="block text-[10px] uppercase text-gray-500 font-sans">52W Range</span>
+                                        <span className="text-gray-300 text-[11px]">${stock.low52W.toFixed(0)}–${stock.high52W.toFixed(0)}</span>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-between gap-2 pt-0.5">
+                                    <div className="flex items-center gap-2 font-mono">
+                                        <span
+                                            className={`rounded-md px-2 py-0.5 text-[11px] font-bold ${
+                                                stock.signal === 'STRONG BUY'
+                                                    ? 'border border-emerald-400/30 bg-emerald-500/15 text-emerald-300'
+                                                    : stock.signal === 'BUY'
+                                                    ? 'border border-teal-400/30 bg-teal-500/15 text-teal-300'
+                                                    : 'border border-yellow-400/30 bg-yellow-500/15 text-yellow-300'
+                                            }`}
+                                        >
+                                            {stock.signal}
+                                        </span>
+                                        <span className="text-xs font-bold text-white">
+                                            Score: {stock.quantScore}
+                                        </span>
+                                    </div>
+
+                                    <Button
+                                        size="sm"
+                                        onClick={() => handleGenerateAIReport(stock.symbol)}
+                                        className="bg-yellow-400/10 border border-yellow-400/25 text-yellow-300 hover:bg-yellow-400/20 text-xs font-semibold h-8"
+                                    >
+                                        <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+                                        AI Brief
+                                    </Button>
+                                </div>
+                            </div>
+                        );
+                    })
+                )}
+            </div>
+
+            {/* Screener Results Table (>= 768px) */}
+            <div className="hidden md:block overflow-x-auto rounded-2xl border border-white/10 bg-black/40">
                 <table className="w-full text-left text-sm">
                     <thead className="border-b border-white/10 bg-white/[0.02] text-xs uppercase tracking-wider text-gray-400 font-mono">
                         <tr>
@@ -412,8 +513,27 @@ export default function ScreenerClient({ initialQuotes }: ScreenerClientProps) {
                                 </div>
                             </div>
 
+                            {/* Upcoming Catalysts */}
+                            {reportData.catalysts && reportData.catalysts.length > 0 && (
+                                <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4 space-y-2">
+                                    <h4 className="flex items-center gap-1.5 text-xs font-bold text-yellow-300 uppercase tracking-wider">
+                                        <Sparkles className="h-3.5 w-3.5" /> Upcoming Catalysts
+                                    </h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {reportData.catalysts.map((cat, idx) => (
+                                            <span
+                                                key={idx}
+                                                className="rounded-lg border border-white/10 bg-black/40 px-2.5 py-1 text-xs text-gray-300"
+                                            >
+                                                {cat}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Key Technical Levels */}
-                            <div className="rounded-xl border border-white/10 bg-black/40 p-3.5 flex items-center justify-between text-xs">
+                            <div className="rounded-xl border border-white/10 bg-black/40 p-3.5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-xs">
                                 <div>
                                     <span className="text-gray-400">Institutional Support: </span>
                                     <span className="font-mono font-bold text-emerald-400">${reportData.supportLevel}</span>
@@ -428,13 +548,13 @@ export default function ScreenerClient({ initialQuotes }: ScreenerClientProps) {
                                 </div>
                             </div>
 
-                            <div className="flex justify-between items-center pt-2">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center pt-2">
                                 <span className="text-[11px] text-gray-500 font-mono">
                                     Engine: {reportData.source} • {new Date(reportData.generatedAt).toLocaleDateString()}
                                 </span>
                                 <Link
                                     href={`/stocks/${reportData.symbol}`}
-                                    className="inline-flex items-center gap-1.5 rounded-lg bg-yellow-400 px-3.5 py-1.5 text-xs font-bold text-black hover:bg-yellow-300"
+                                    className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-yellow-400 px-3.5 py-2 text-xs font-bold text-black hover:bg-yellow-300"
                                 >
                                     Open Full Terminal
                                     <ArrowUpRight className="h-3.5 w-3.5" />

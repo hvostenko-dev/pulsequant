@@ -207,3 +207,36 @@ export const removeStockFromWatchlist = async ({
         symbol: normalizedSymbol,
     };
 };
+
+export const seedDemoWatchlist = async () => {
+    const userId = await getCurrentUserId();
+    await connectToDatabase();
+
+    const demoStocks = [
+        { symbol: "NVDA", company: "NVIDIA Corporation" },
+        { symbol: "AAPL", company: "Apple Inc." },
+        { symbol: "MSFT", company: "Microsoft Corporation" },
+        { symbol: "AMZN", company: "Amazon.com Inc." },
+        { symbol: "META", company: "Meta Platforms Inc." },
+        { symbol: "TSLA", company: "Tesla Inc." },
+    ];
+
+    for (const stock of demoStocks) {
+        await Watchlist.findOneAndUpdate(
+            { userId, symbol: stock.symbol },
+            {
+                $setOnInsert: {
+                    userId,
+                    symbol: stock.symbol,
+                    company: stock.company,
+                    addedAt: new Date(),
+                },
+            },
+            { upsert: true, new: true }
+        );
+    }
+
+    revalidatePath("/");
+    revalidatePath("/watchlist");
+    return { success: true, count: demoStocks.length };
+};

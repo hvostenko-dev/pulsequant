@@ -12,12 +12,9 @@ import {
 import { getBatchEnrichedQuotes } from '@/lib/actions/finnhub.actions';
 import { getCurrentUserWatchlistSymbols } from '@/lib/actions/watchlist.actions';
 import {
-    Activity,
-    ArrowUpRight,
     Briefcase,
     Sparkles,
     Star,
-    Bell,
     TrendingUp,
     TrendingDown,
 } from 'lucide-react';
@@ -46,7 +43,7 @@ const Home = async () => {
 
             {/* Hero Command Bar */}
             <MarketStatusBar />
-            <section className="animate-fade-up glass aurora-border relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent p-6 sm:p-8 lg:p-10 shadow-2xl">
+            <section className="animate-fade-up glass aurora-border relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent p-5 sm:p-8 lg:p-10 shadow-2xl">
                 <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-violet-500/20 blur-[120px]" />
                 <div className="pointer-events-none absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-cyan-400/15 blur-[120px]" />
 
@@ -70,56 +67,58 @@ const Home = async () => {
                     </div>
 
                     {/* Quick Access Action Pills */}
-                    <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+                    <div className="grid grid-cols-1 gap-2.5 sm:flex sm:flex-wrap sm:items-center sm:gap-3">
                         <Link
                             href="/portfolio"
-                            className="inline-flex items-center gap-2 rounded-xl bg-yellow-400 px-4 py-2.5 text-xs sm:text-sm font-bold text-black transition hover:bg-yellow-300 hover:shadow-lg hover:shadow-yellow-400/20"
+                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-yellow-400 px-4 py-2.5 text-xs sm:text-sm font-bold text-black transition hover:bg-yellow-300 hover:shadow-lg hover:shadow-yellow-400/20"
                         >
                             <Briefcase className="h-4 w-4" />
                             Portfolio Simulator
                         </Link>
 
-                        <Link
-                            href="/screener"
-                            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.06] px-4 py-2.5 text-xs sm:text-sm font-semibold text-white transition hover:bg-white/[0.1] hover:text-yellow-300"
-                        >
-                            <Sparkles className="h-4 w-4 text-yellow-400" />
-                            AI Equity Screener
-                        </Link>
+                        <div className="grid grid-cols-2 gap-2.5 sm:contents">
+                            <Link
+                                href="/screener"
+                                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.06] px-4 py-2.5 text-xs sm:text-sm font-semibold text-white transition hover:bg-white/[0.1] hover:text-yellow-300"
+                            >
+                                <Sparkles className="h-4 w-4 text-yellow-400 shrink-0" />
+                                <span className="truncate">AI Screener</span>
+                            </Link>
 
-                        <Link
-                            href="/watchlist"
-                            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.06] px-4 py-2.5 text-xs sm:text-sm font-semibold text-white transition hover:bg-white/[0.1] hover:text-amber-300"
-                        >
-                            <Star className="h-4 w-4 text-amber-400" />
-                            Watchlist ({watchlistCount})
-                        </Link>
+                            <Link
+                                href="/watchlist"
+                                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.06] px-4 py-2.5 text-xs sm:text-sm font-semibold text-white transition hover:bg-white/[0.1] hover:text-amber-300"
+                            >
+                                <Star className="h-4 w-4 text-amber-400 shrink-0" />
+                                <span className="truncate">Watchlist ({watchlistCount})</span>
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
                 {/* Live Stock Ticker Cards Strip */}
-                <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+                <div className="mt-8 grid grid-cols-2 gap-2.5 sm:gap-3 sm:grid-cols-3 lg:grid-cols-6">
                     {quotes.map((stock) => {
                         const isUp = stock.change >= 0;
                         return (
                             <Link
                                 key={stock.symbol}
                                 href={`/stocks/${stock.symbol}`}
-                                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-3.5 transition hover:-translate-y-0.5 hover:border-yellow-400/30 hover:bg-black/60"
+                                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-3 sm:p-3.5 transition hover:-translate-y-0.5 hover:border-yellow-400/30 hover:bg-black/60"
                             >
-                                <div className="flex items-center justify-between">
+                                <div className="flex items-center justify-between gap-1">
                                     <span className="font-mono text-sm font-bold text-white group-hover:text-yellow-300 transition-colors">
                                         {stock.symbol}
                                     </span>
                                     <span
-                                        className={`inline-flex items-center font-mono text-xs font-semibold ${
+                                        className={`inline-flex items-center font-mono text-[11px] sm:text-xs font-semibold ${
                                             isUp ? 'text-emerald-400' : 'text-red-400'
                                         }`}
                                     >
                                         {isUp ? (
-                                            <TrendingUp className="mr-0.5 h-3 w-3" />
+                                            <TrendingUp className="mr-0.5 h-3 w-3 shrink-0" />
                                         ) : (
-                                            <TrendingDown className="mr-0.5 h-3 w-3" />
+                                            <TrendingDown className="mr-0.5 h-3 w-3 shrink-0" />
                                         )}
                                         {isUp ? '+' : ''}
                                         {stock.changePercent.toFixed(2)}%
@@ -137,16 +136,16 @@ const Home = async () => {
                 </div>
             </section>
 
-            {/* TradingView Institutional Terminal Grid */}
+            {/* Pulse Gauge & Pro Tips */}
             <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 <MarketPulseGauge quotes={quotes} />
                 <div className="glass aurora-border rounded-2xl p-5 lg:col-span-2">
-                    <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">Pro Tips</h3>
-                    <ul className="mt-3 grid gap-2 text-sm text-gray-300 sm:grid-cols-2">
+                    <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400">Pro Tips & Terminal Shortcuts</h3>
+                    <ul className="mt-3 grid gap-2 text-xs sm:text-sm text-gray-300 sm:grid-cols-2">
                         <li className="rounded-lg bg-white/[0.04] p-3">Press <kbd className="kbd">Ctrl</kbd> <kbd className="kbd">K</kbd> to search any symbol instantly.</li>
                         <li className="rounded-lg bg-white/[0.04] p-3">Use <kbd className="kbd">g</kbd> then <kbd className="kbd">p</kbd> to jump to your Portfolio.</li>
                         <li className="rounded-lg bg-white/[0.04] p-3">Run the Half-Kelly sizer in the simulator to size positions by edge.</li>
-                        <li className="rounded-lg bg-white/[0.04] p-3">Press <kbd className="kbd">?</kbd> anywhere to view every shortcut.</li>
+                        <li className="rounded-lg bg-white/[0.04] p-3">Press <kbd className="kbd">?</kbd> on desktop to view every shortcut.</li>
                     </ul>
                 </div>
             </section>

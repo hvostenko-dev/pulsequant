@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
-import { ShieldCheck, Activity, Terminal } from "lucide-react";
+import MobileBottomNav from "@/components/MobileBottomNav";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -19,27 +19,30 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#050505] text-gray-300">
-            <Header user={user} /><KeyboardShortcuts />
+        <div className="min-h-screen flex flex-col bg-[#050505] text-gray-300 pb-16 lg:pb-0">
+            <Header user={user} />
+            <KeyboardShortcuts />
 
-            <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+            <main className="flex-1 mx-auto w-full max-w-[1440px] 2xl:max-w-[1600px] px-3.5 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
                 {children}
             </main>
 
             <footer className="border-t border-white/10 bg-[#08090C] py-8 text-xs text-gray-500">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
+                <div className="mx-auto max-w-[1440px] 2xl:max-w-[1600px] px-3.5 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5 sm:gap-3">
                         <Image
                             src="/assets/icons/logo.svg"
                             alt="PulseQuant Logo"
                             width={130}
                             height={28}
+                            style={{ width: "auto" }}
                             className="h-6 w-auto opacity-80"
                         />
-                        <span>• Institutional Market Intelligence Terminal</span>
+                        <span className="hidden sm:inline">•</span>
+                        <span>Institutional Market Intelligence Terminal</span>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-gray-400">
+                    <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-gray-400">
                         <Link href="/" className="hover:text-yellow-400 transition-colors">Terminal</Link>
                         <Link href="/portfolio" className="hover:text-yellow-400 transition-colors">Portfolio</Link>
                         <Link href="/screener" className="hover:text-yellow-400 transition-colors">Screener & AI</Link>
@@ -53,6 +56,8 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
                     </div>
                 </div>
             </footer>
+
+            <MobileBottomNav />
         </div>
     );
 };
